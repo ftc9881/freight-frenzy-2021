@@ -1,0 +1,35 @@
+{
+  "states": {
+    "moveOut": {
+      "type": "MOVE",
+      "distance": 1,
+      "movement": {
+        "moveSpeed": 0.25,
+        "moveAngle": 0,
+        "turnSpeed": 0
+      },
+      "steering": {
+        "type": "IMU",
+        "imuSensor": "imu_control",
+        "pid": {
+          "kP": 0.1,
+          "kI": 0,
+          "kD": 0
+        }
+      },
+      "transitions": {
+        "end": {
+          "condition": {
+            "name": "driveTrain",
+            "propertyName": "maxDistance",
+            "max": 1
+          },
+          "newState": "done"
+        }
+      }
+    },
+    "done": {
+      "type": "TERMINATE"
+    }
+  }
+}

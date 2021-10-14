@@ -1,0 +1,25 @@
+{
+  "startState": "turn180",
+  "states": {
+    "turn180": {
+      "type": "TURN",
+      "angle": 180,
+      "maxError": 5,
+      "maxTurnSpeed": 0.35,
+      "imuSensor": "imu_control",
+      "pid": {
+        "kP": 0.1,
+        "kI": 0,
+        "kD": 0
+      },
+      "transitions": {
+        "end": {
+          "newState": "done"
+        }
+      }
+    },
+    "done": {
+      "type": "TERMINATE"
+    }
+  }
+}

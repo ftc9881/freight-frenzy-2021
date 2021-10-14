@@ -1,0 +1,27 @@
+{
+  "outTakeOut": {
+    "type": "MOTOR",
+    "motor": "outtakeMotor",
+    "maxMilliseconds": 2000,
+    "speed": 1,
+    "transitions": {
+      "end": {
+        "newState": "outTakeIn"
+      }
+    }
+  },
+  "outTakeIn": {
+    "type": "MOTOR",
+    "motor": "outtakeMotor",
+    "maxMilliseconds": 2000,
+    "speed": -1,
+    "transitions": {
+      "end": {
+        "newState": "outTakeOut"
+      }
+    }
+  },
+  "done": {
+    "type": "TERMINATE"
+  }
+}

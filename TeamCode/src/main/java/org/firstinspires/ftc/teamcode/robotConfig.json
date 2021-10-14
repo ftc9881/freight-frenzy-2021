@@ -1,0 +1,118 @@
+{
+  "driveTrain": {
+    "type": "MECANUM",
+    "telemetry": true,
+    "motors": {
+      "frontLeft": {
+        "name": "left_front_drive",
+        "direction": "FORWARD",
+        "clicksPerMeter": 1500
+      },
+      "backLeft": {
+        "name": "left_back_drive",
+        "direction": "FORWARD",
+        "clicksPerMeter": 1500
+      },
+      "frontRight": {
+        "name": "right_front_drive",
+        "direction": "REVERSE",
+        "clicksPerMeter": 1500
+      },
+      "backRight": {
+        "name": "right_back_drive",
+        "direction": "REVERSE",
+        "clicksPerMeter": 1500
+      }
+    }
+  },
+  "devices": {
+    "intakeMotor": {
+      "type": "MOTOR",
+      "name": "intake_motor",
+      "direction": "FORWARD"
+    },
+    "outtakeMotor": {
+      "type": "MOTOR",
+      "name": "outtake_motor",
+      "direction": "FORWARD",
+      "velocity": true,
+      "maxVelocity": 36000
+    }
+  },
+  "sensors": {
+    "imu_control": {
+      "type": "IMU",
+      "name": "imu_control",
+      "telemetry": false,
+      "log": false,
+      "xAxis": "Z",
+      "yAxis": "X",
+      "zAxis": "Y"
+    },
+    "imu_expansion": {
+      "type": "IMU",
+      "name": "imu_expansion",
+      "telemetry": false,
+      "log": false,
+      "xAxis": "Z",
+      "yAxis": "X",
+      "zAxis": "Y"
+    }
+  },
+  "controllerOne": {
+    "type": "STEER",
+    "telemetry": true,
+    "controls": {
+      "LEFT_X": {
+        "telemetry": true
+      },
+      "LEFT_Y": {
+        "telemetry": true
+      },
+      "LEFT_TRIGGER": {
+        "telemetry": false,
+        "actions": {
+          "change": {
+            "deviceName": "outtakeMotor",
+            "behavior": "REVERSE"
+          }
+        }
+      },
+      "RIGHT_TRIGGER": {
+        "telemetry": false,
+        "actions": {
+          "change": {
+            "deviceName": "outtakeMotor",
+            "behavior": "FORWARD"
+          }
+        }
+      },
+      "LEFT_BUTTON": {
+        "telemetry": false,
+        "actions": {
+          "press": {
+            "deviceName": "intakeMotor",
+            "behavior": "FORWARD"
+          },
+          "release": {
+            "deviceName": "intakeMotor",
+            "behavior": "STOP"
+          }
+        }
+      },
+      "RIGHT_BUTTON": {
+        "telemetry": false,
+        "actions": {
+          "press": {
+            "deviceName": "intakeMotor",
+            "behavior": "REVERSE"
+          },
+          "release": {
+            "deviceName": "intakeMotor",
+            "behavior": "STOP"
+          }
+        }
+      }
+    }
+  }
+}
