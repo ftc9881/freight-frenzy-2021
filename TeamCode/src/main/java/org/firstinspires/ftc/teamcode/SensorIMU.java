@@ -14,7 +14,7 @@ import org.json.JSONObject;
 
 import java.util.Map;
 
-public class SensorIMU extends Sensor implements SensorIF {
+public class SensorIMU extends Sensor implements SensorIMU_IF {
     private static final String CLASS_NAME = "SensorIMU";
 
     BNO055IMU _imu;
@@ -23,6 +23,8 @@ public class SensorIMU extends Sensor implements SensorIF {
     private Orientation _lastAngles;
     private double _globalHeading;
     private double _currentHeading;
+
+    AxesOrder _axesOrder = AxesOrder.XYZ;
 
     enum Axis {
         X,
@@ -34,8 +36,10 @@ public class SensorIMU extends Sensor implements SensorIF {
     private Axis _yAxis = Axis.Y;
     private Axis _zAxis = Axis.Z;
 
-    public SensorIMU(OpMode opMode) {
-        super(opMode);
+    private boolean _reverse = false;
+
+    public SensorIMU(OpMode opMode, String name) {
+        super(opMode, name);
     }
 
     @Override
@@ -65,6 +69,10 @@ public class SensorIMU extends Sensor implements SensorIF {
                 throw new ConfigurationException("No IMU with the name: " + imuName, e);
             }
 
+            if (jsonObject.has("axesOrder")) {
+                _axesOrder = AxesOrder.valueOf(jsonObject.getString("axesOrder"));
+            }
+
             if (jsonObject.has("xAxis")) {
                 _xAxis = Axis.valueOf(jsonObject.getString("xAxis"));
             }
@@ -74,6 +82,9 @@ public class SensorIMU extends Sensor implements SensorIF {
             if (jsonObject.has("zAxis")) {
                 _zAxis = Axis.valueOf(jsonObject.getString("zAxis"));
             }
+            if (jsonObject.has("reverse")) {
+                _reverse = jsonObject.getBoolean("reverse");
+            }
         } catch (JSONException e) {
             throw new ConfigurationException(e.getMessage(), e);
         }
@@ -82,7 +93,14 @@ public class SensorIMU extends Sensor implements SensorIF {
     public void update() {
         super.update();
 
-        _angles = _imu.getAngularOrientation(AxesReference.INTRINSIC, AxesOrder.XYZ, AngleUnit.DEGREES);
+        _angles = _imu.getAngularOrientation(AxesReference.INTRINSIC, _axesOrder, AngleUnit.DEGREES);
+
+        RobotLog.dd(CLASS_NAME,
+                "update()::angles: first: %.2f second: %.2f third: %.2f",
+                _angles.firstAngle,
+                _angles.secondAngle,
+                _angles.thirdAngle
+        );
 
         if(_lastAngles == null) {
             _globalHeading = 0;
@@ -110,6 +128,10 @@ public class SensorIMU extends Sensor implements SensorIF {
             }
 
             double deltaAngle = angle - lastAngle;
+
+            if(_reverse) {
+                deltaAngle *= -1;
+            }
 
             if (deltaAngle < -180) {
                 deltaAngle += 360;

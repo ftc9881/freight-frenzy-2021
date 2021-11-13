@@ -4,17 +4,28 @@ import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import com.qualcomm.robotcore.util.RobotLog;
 
 import org.firstinspires.ftc.robotcore.external.Telemetry;
+import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.Map;
 
 public class DeviceMotor extends Device implements DeviceIF {
+    private static final String CLASS_NAME = "DeviceMotor";
+
     private BotMotor _botMotor = null;
 
-    public DeviceMotor(OpMode opMode) {
-        super(opMode);
+    private double _maxSpeed = 1;
 
-        _botMotor = new BotMotor(null, opMode);
+    private double _minSpeed = 0;
+
+    private double _speedScale = 1;
+
+    private double _speedExponent = 1;
+
+    public DeviceMotor(OpMode opMode, String name) {
+        super(opMode, name);
+
+        _botMotor = new BotMotor(opMode, name);
     }
 
     @Override
@@ -22,6 +33,32 @@ public class DeviceMotor extends Device implements DeviceIF {
         super.configure(jsonObject);
 
         _botMotor.configure(jsonObject);
+
+        try {
+            if( jsonObject.has("maxSpeed")) {
+                _maxSpeed = jsonObject.getDouble("maxSpeed");
+                RobotLog.dd(CLASS_NAME, "configure()::_maxSpeed: %s", _maxSpeed);
+            }
+
+            if( jsonObject.has("minSpeed")) {
+                _minSpeed = jsonObject.getDouble("minSpeed");
+                RobotLog.dd(CLASS_NAME, "configure()::_minSpeed: %s", _minSpeed);
+            }
+
+            if( jsonObject.has("speedScale")) {
+                _speedScale = jsonObject.getDouble("speedScale");
+                RobotLog.dd(CLASS_NAME, "configure()::_speedScale: %s", _speedScale);
+            }
+
+            if( jsonObject.has("speedExponent")) {
+                _speedExponent = jsonObject.getDouble("speedExponent");
+                RobotLog.dd(CLASS_NAME, "configure()::_speedExponent: %s", _speedExponent);
+            }
+
+        } catch (JSONException e) {
+            throw new ConfigurationException(e.getMessage(), e);
+        }
+
     }
 
     void setSpeed(double speed) {
@@ -83,18 +120,22 @@ public class DeviceMotor extends Device implements DeviceIF {
         _botMotor.getPropertyValues(values);
     }
 
+    double transformSpeed(double speed) {
+        return Math.max(_minSpeed, Math.min(_maxSpeed, Math.pow(speed * _speedScale, _speedExponent)));
+    }
+
     @Override
     public void processAction(ActionIF action, double value) {
-        RobotLog.dd(this.getClass().getSimpleName(), "Process action: %s %s", action.getBehavior(), value);
+        RobotLog.dd(this.getClass().getSimpleName(), "Process action: %s %s %s", _name, action.getBehavior(), value);
 
         Behavior behavior = Behavior.valueOf(action.getBehavior());
 
         switch(behavior) {
             case FORWARD:
-                _botMotor.setSpeed(value);
+                _botMotor.setSpeed(transformSpeed(value));
                 break;
             case REVERSE:
-                _botMotor.setSpeed(-value);
+                _botMotor.setSpeed(-transformSpeed(value));
                 break;
             case STOP:
                 _botMotor.setSpeed(0);

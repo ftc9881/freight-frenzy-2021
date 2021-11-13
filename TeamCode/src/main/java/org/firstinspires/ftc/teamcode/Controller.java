@@ -36,8 +36,8 @@ public abstract class Controller extends Component implements ControllerIF {
     BooleanState _rightButton = new BooleanState("rightBotton", false);
     BooleanState _leftButton = new BooleanState("leftButton", false);
 
-    public Controller(OpMode opMode) {
-        super(opMode);
+    public Controller(OpMode opMode, String name) {
+        super(opMode, name);
     }
 
     private void configureControls(JSONObject jsonObject, Map<String, DeviceIF> devices) throws JSONException, ConfigurationException {

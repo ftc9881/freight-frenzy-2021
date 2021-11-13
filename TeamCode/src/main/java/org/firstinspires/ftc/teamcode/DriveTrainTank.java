@@ -1,12 +1,15 @@
 package org.firstinspires.ftc.teamcode;
 
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
+import com.qualcomm.robotcore.util.RobotLog;
 
 import org.json.JSONObject;
 
 public class DriveTrainTank extends DriveTrainDual {
-    public DriveTrainTank(OpMode opMode) {
-        super(opMode);
+    private static final String CLASS_NAME = "DriveTrainTank";
+
+    public DriveTrainTank(OpMode opMode, String name) {
+        super(opMode, name);
     }
 
     @Override
@@ -20,10 +23,16 @@ public class DriveTrainTank extends DriveTrainDual {
         double moveAngle = movement._moveAngle;
         double turnSpeed = movement._turnSpeed;
 
-        // TODO: Implement this
+        double leftPower = moveSpeed + turnSpeed;
+        double rightPower = moveSpeed - turnSpeed;
 
-        double leftPower = 0;
-        double rightPower = 0;
+        if(leftPower > 1) leftPower = 1;
+        else if(leftPower <-1) leftPower = -1;
+
+        if(rightPower > 1) rightPower = 1;
+        else if(rightPower <-1) rightPower = -1;
+
+        RobotLog.dd(CLASS_NAME, "updateMovement()::leftPower: %.2f rightPower: %.2f", leftPower, rightPower);
 
         //  Send calculated power to wheels
 

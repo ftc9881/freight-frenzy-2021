@@ -29,6 +29,7 @@
 
 package org.firstinspires.ftc.teamcode;
 
+import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.hardware.DcMotor;
@@ -55,16 +56,21 @@ public class SimpleIntake extends LinearOpMode {
     // Declare OpMode members.
     private ElapsedTime runtime = new ElapsedTime();
 
-    private DcMotor intakeMotor = null;
+    private DcMotor leftIntakeMotor = null;
+    private DcMotor rightIntakeMotor = null;
+    private DcMotor liftMotor = null;
 
     @Override
     public void runOpMode() {
         telemetry.addData("Status", "Initialized");
         telemetry.update();
 
-        intakeMotor = hardwareMap.get(DcMotor.class, "intake_motor");
+        leftIntakeMotor = hardwareMap.get(DcMotor.class, "left_intake");
+        rightIntakeMotor = hardwareMap.get(DcMotor.class, "right_intake");
 
-        intakeMotor.setDirection(DcMotor.Direction.REVERSE);
+        liftMotor = hardwareMap.get(DcMotor.class, "lift_motor");
+
+        leftIntakeMotor.setDirection(DcMotor.Direction.REVERSE);
 
         // Wait for the game to start (driver presses PLAY)
         waitForStart();
@@ -76,7 +82,30 @@ public class SimpleIntake extends LinearOpMode {
         while (opModeIsActive()) {
             double rightTrigger = gamepad1.right_trigger;
 
-            intakeMotor.setPower(rightTrigger);
+            if(rightTrigger > 0) {
+                leftIntakeMotor.setPower(rightTrigger);
+                rightIntakeMotor.setPower(rightTrigger);
+            }
+
+            double leftTrigger = gamepad1.left_trigger;
+
+            if(leftTrigger > 0) {
+                leftIntakeMotor.setPower(-leftTrigger);
+                rightIntakeMotor.setPower(-leftTrigger);
+            }
+
+            boolean rightButton = gamepad1.right_bumper;
+
+            if(rightButton) {
+                liftMotor.setPower(1);
+            }
+
+            boolean leftButton = gamepad1.left_bumper;
+
+            if(leftButton) {
+                liftMotor.setPower(-1);
+            }
+
         }
     }
 }

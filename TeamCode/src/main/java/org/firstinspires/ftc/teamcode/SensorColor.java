@@ -27,8 +27,8 @@ public class SensorColor extends Sensor implements SensorIF {
     NormalizedRGBA _colors;
     final float[] _hsvValues = new float[3];
 
-    public SensorColor(OpMode opMode) {
-        super(opMode);
+    public SensorColor(OpMode opMode, String name) {
+        super(opMode, name);
     }
 
     @Override

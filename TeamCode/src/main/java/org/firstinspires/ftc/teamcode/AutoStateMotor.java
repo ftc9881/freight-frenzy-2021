@@ -57,7 +57,7 @@ public class AutoStateMotor extends AutoState implements AutoStateIF {
         _deviceMotor.resetPosition();
     }
 
-    public boolean doAction() {
+    public boolean doAction() throws InterruptedException {
         boolean active = super.doAction();
 
         if(active) {

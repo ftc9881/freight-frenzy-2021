@@ -18,7 +18,6 @@ public class BotMotor extends Component {
 
     DcMotor _dcMotor = null;
 
-    private String _name;
     private boolean _velocity = false;
     private double _maxVelocity = 36000;  // 360 degrees * 6000 RPM / (60 S/M)
     private int _clicksPerMeter = 1500;
@@ -31,10 +30,8 @@ public class BotMotor extends Component {
     // TODO: Add lookup table to translate input power to motor power
     // TODO: Add parametric power conversion (i.e. exponent)
 
-    BotMotor(String name, OpMode opMode) {
-        super(opMode);
-
-        _name = name;
+    BotMotor(OpMode opMode, String name) {
+        super(opMode, name);
     }
 
     @Override
@@ -119,6 +116,8 @@ public class BotMotor extends Component {
      * @param speed
      */
     public void setSpeed(double speed) {
+        RobotLog.dd(CLASS_NAME, "speed: %.2f", speed);
+
         if(_velocity) {
             double effVelocity = speed * _maxVelocity;
             ((DcMotorEx)_dcMotor).setVelocity(effVelocity, AngleUnit.DEGREES);
@@ -129,6 +128,7 @@ public class BotMotor extends Component {
     }
 
     public void stop() {
+        RobotLog.dd(CLASS_NAME, "stop()");
         setSpeed(0);
     }
 

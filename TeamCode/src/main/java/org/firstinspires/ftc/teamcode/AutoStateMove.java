@@ -8,31 +8,14 @@ import org.json.JSONObject;
 
 import java.util.Map;
 
-public class AutoStateMove extends AutoState implements AutoStateIF {
+public class AutoStateMove extends AutoStateMotion implements AutoStateIF {
     private static final String CLASS_NAME = "AutoStateMove";
 
     Movement _movement = new Movement();
     double _distance = 0;
-    SteeringIF _steering;
-    DriveTrainIF _driveTrain;
 
-    public AutoStateMove(OpMode opMode) {
-        super(opMode);
-    }
-
-    private void configureSteering(JSONObject jsonObject, Map<String, SensorIF> sensors) throws ConfigurationException {
-        try {
-            String steeringTypeName = jsonObject.getString("type");
-
-            Steering.SteeringType steeringType = Steering.SteeringType.valueOf(steeringTypeName);
-
-            _steering = Steering.constructSteering(steeringType);
-
-            _steering.configure(jsonObject, sensors);
-
-        } catch (JSONException e) {
-            throw new ConfigurationException(e.getMessage(), e);
-        }
+    public AutoStateMove(OpMode opMode, SteeringIF steering) {
+        super(opMode, steering);
     }
 
     public void configure(JSONObject jsonObject,
@@ -50,27 +33,12 @@ public class AutoStateMove extends AutoState implements AutoStateIF {
             if (jsonObject.has("distance")) {
                 _distance = jsonObject.getDouble("distance");
             }
-            if (jsonObject.has("steering")) {
-                configureSteering(jsonObject.getJSONObject("steering"), sensors);
-            }
         } catch (JSONException e) {
             throw new ConfigurationException(e.getMessage(), e);
         }
     }
 
-    public void init() {
-        super.init();
-
-        RobotLog.dd(CLASS_NAME, "init()");
-
-        if (_steering != null) {
-            _steering.init();
-        }
-
-        _driveTrain.resetPositions();
-    }
-
-    public boolean doAction() {
+    public boolean doAction() throws InterruptedException {
         boolean active = super.doAction();
 
         if(active) {
@@ -96,11 +64,5 @@ public class AutoStateMove extends AutoState implements AutoStateIF {
         }
 
         return active;
-    }
-
-    public void end() {
-        super.end();
-
-        _driveTrain.stop();
     }
 }

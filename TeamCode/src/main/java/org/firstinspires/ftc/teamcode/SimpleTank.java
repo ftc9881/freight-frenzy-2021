@@ -32,6 +32,7 @@ package org.firstinspires.ftc.teamcode;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.hardware.DcMotor;
+import com.qualcomm.robotcore.hardware.Servo;
 import com.qualcomm.robotcore.util.ElapsedTime;
 
 
@@ -60,6 +61,8 @@ public class SimpleTank extends LinearOpMode {
     private DcMotor intakeMotor = null;
     private DcMotor outtakeMotor = null;
 
+    private Servo simpleServo = null;
+
     @Override
     public void runOpMode() {
         telemetry.addData("Status", "Initialized");
@@ -74,10 +77,12 @@ public class SimpleTank extends LinearOpMode {
         intakeMotor = hardwareMap.get(DcMotor.class, "intake_motor");
         outtakeMotor = hardwareMap.get(DcMotor.class, "outtake_motor");
 
+        simpleServo = hardwareMap.get(Servo.class, "simple_servo");
+
         // Most robots need the motor on one side to be reversed to drive forward
         // Reverse the motor that runs backwards when connected directly to the battery
-        leftDrive.setDirection(DcMotor.Direction.FORWARD);
-        rightDrive.setDirection(DcMotor.Direction.REVERSE);
+        leftDrive.setDirection(DcMotor.Direction.REVERSE);
+        rightDrive.setDirection(DcMotor.Direction.FORWARD);
 
         leftDrive.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
         rightDrive.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
@@ -92,11 +97,12 @@ public class SimpleTank extends LinearOpMode {
         waitForStart();
         runtime.reset();
 
-        boolean tankDrive = false;
-
         // run until the end of the match (driver presses STOP)
         while (opModeIsActive()) {
+            double leftX = gamepad1.left_stick_x;
             double leftY = gamepad1.left_stick_y;
+
+            double rightX = gamepad1.right_stick_x;
             double rightY = gamepad1.right_stick_y;
 
             double rightTrigger = gamepad1.right_trigger;
@@ -104,6 +110,9 @@ public class SimpleTank extends LinearOpMode {
 
             boolean rightButton = gamepad1.right_bumper;
             boolean leftButton = gamepad1.left_bumper;
+
+            boolean aButton = gamepad1.a;
+            boolean bButton = gamepad1.b;
 
             if(rightButton) {
                 intakeMotor.setPower(1);
@@ -122,11 +131,28 @@ public class SimpleTank extends LinearOpMode {
                 outtakeMotor.setPower(0);
             }
 
+            if(aButton) {
+                simpleServo.setPosition(0);
+            }
+
+            if(bButton) {
+                simpleServo.setPosition(1);
+            }
+
             double leftPower;
             double rightPower;
 
-            leftPower = leftY;
-            rightPower = rightY;
+//            leftPower = leftY;
+//            rightPower = rightY;
+
+            leftPower = leftX + rightY;
+            rightPower = - leftX + rightY;
+
+            if(leftPower > 1) leftPower = 1;
+            else if(leftPower <-1) leftPower = -1;
+
+            if(rightPower > 1) rightPower = 1;
+            else if(rightPower <-1) rightPower = -1;
 
             //  Send calculated power to wheels
 
@@ -138,6 +164,7 @@ public class SimpleTank extends LinearOpMode {
 
             // Show the elapsed game time and wheel power.
             telemetry.addData("Status", "Run Time: " + runtime.toString());
+            telemetry.addData("Power", "left (%f), right (%f)", leftPower, rightPower);
             telemetry.addData("Positions", "left (%d), right (%d)", leftDriveEncoder, rightDriveEncoder);
             telemetry.update();
         }

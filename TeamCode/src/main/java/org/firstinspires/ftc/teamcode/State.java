@@ -65,6 +65,41 @@ public class State {
 
         actions.add(action);
 
+        String deviceName2 = null;
+
+        try {
+            deviceName2 = jsonObject.getString("deviceName2");
+
+            RobotLog.dd(this.getClass().getSimpleName(), "deviceName2: " + deviceName);
+        } catch (JSONException e) {
+        }
+
+        if(deviceName2 != null) {
+            DeviceIF device2 = devices.get(deviceName2);
+
+            if (device2 == null) {
+                throw new ConfigurationException("Invalid deviceName2: " + deviceName2, null);
+            }
+
+            String behavior2;
+
+            try {
+                behavior2 = jsonObject.getString("behavior2");
+            } catch (JSONException e) {
+                throw new ConfigurationException("Missing behavior2 parameter", e);
+            }
+
+            RobotLog.dd(this.getClass().getSimpleName(), "behavior2: " + behavior2);
+
+            if (!device.isValidBehavior(behavior2)) {
+                throw new ConfigurationException("Invalid behavior2 for " + deviceName2 + ": " + behavior2, null);
+            }
+
+            Action action2 = new Action(device2, behavior2);
+
+            actions.add(action2);
+        }
+
         return(actions);
     }
 

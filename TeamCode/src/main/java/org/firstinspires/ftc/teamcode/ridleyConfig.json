@@ -1,0 +1,180 @@
+{
+  "driveTrain": {
+    "type": "TANK",
+    "telemetry": true,
+    "motors": {
+      "left": {
+        "name": "left_drive",
+        "direction": "FORWARD",
+        "clicksPerMeter": 1500
+      },
+      "right": {
+        "name": "right_drive",
+        "direction": "REVERSE",
+        "clicksPerMeter": 1500
+      }
+    }
+  },
+  "devices": {
+    "liftMotor": {
+      "type": "MOTOR",
+      "name": "lift_motor",
+      "direction": "FORWARD",
+      "telemetry": true
+    },
+    "rightIntakeMotor": {
+      "type": "MOTOR",
+      "name": "right_intake",
+      "direction": "FORWARD",
+      "velocity": false,
+      "maxVelocity": 36000,
+      "telemetry": true,
+      "speedExponent": 2,
+      "speedScale": ".75"
+    },
+    "leftIntakeMotor": {
+      "type": "MOTOR",
+      "name": "left_intake",
+      "direction": "REVERSE",
+      "velocity": false,
+      "maxVelocity": 36000,
+      "telemetry": true,
+      "speedExponent": 2,
+      "speedScale": ".75"
+    }
+  },
+  "sensors": {
+    "imu_control": {
+      "type": "IMU",
+      "name": "imu_control",
+      "telemetry": true,
+      "log": false,
+      "axesOrder": "ZYX",
+      "xAxis": "Z",
+      "yAxis": "Y",
+      "zAxis": "X",
+      "reverse": true
+    }
+  },
+  "controllerOne": {
+    "type": "TANK_STEER",
+    "telemetry": true,
+    "controls": {
+      "LEFT_X": {
+        "telemetry": false
+      },
+      "LEFT_Y": {
+        "telemetry": false
+      },
+      "RIGHT_X": {
+        "telemetry": false
+      },
+      "RIGHT_Y": {
+        "telemetry": false
+      },
+      "LEFT_BUTTON": {
+        "telemetry": true,
+        "actions": {
+          "press": {
+            "deviceName": "liftMotor",
+            "behavior": "REVERSE"
+          },
+          "release": {
+            "deviceName": "liftMotor",
+            "behavior": "STOP"
+          }
+        }
+      },
+      "RIGHT_BUTTON": {
+        "telemetry": true,
+        "actions": {
+          "press": {
+            "deviceName": "liftMotor",
+            "behavior": "FORWARD"
+          },
+          "release": {
+            "deviceName": "liftMotor",
+            "behavior": "STOP"
+          }
+        }
+      },
+      "LEFT_TRIGGER": {
+        "telemetry": true,
+        "actions": {
+          "change": {
+            "deviceName": "leftIntakeMotor",
+            "behavior": "FORWARD",
+            "deviceName2": "rightIntakeMotor",
+            "behavior2": "FORWARD"
+          }
+        }
+      },
+      "RIGHT_TRIGGER": {
+        "telemetry": true,
+        "actions": {
+          "change": {
+            "deviceName": "leftIntakeMotor",
+            "behavior": "REVERSE",
+            "deviceName2": "rightIntakeMotor",
+            "behavior2": "REVERSE"
+          }
+        }
+      }
+    }
+  }
+,
+  "controllerTwo": {
+    "type": "SHOOTER",
+    "telemetry": true,
+    "controls": {
+      "LEFT_BUTTON": {
+        "telemetry": true,
+        "actions": {
+          "press": {
+            "deviceName": "liftMotor",
+            "behavior": "REVERSE"
+          },
+          "release": {
+            "deviceName": "liftMotor",
+            "behavior": "STOP"
+          }
+        }
+      },
+      "RIGHT_BUTTON": {
+        "telemetry": true,
+        "actions": {
+          "press": {
+            "deviceName": "liftMotor",
+            "behavior": "FORWARD"
+          },
+          "release": {
+            "deviceName": "liftMotor",
+            "behavior": "STOP"
+          }
+        }
+      },
+      "LEFT_TRIGGER": {
+        "telemetry": true,
+        "actions": {
+          "change": {
+            "deviceName": "leftIntakeMotor",
+            "behavior": "FORWARD",
+            "deviceName2": "rightIntakeMotor",
+            "behavior2": "FORWARD"
+          }
+        }
+      },
+      "RIGHT_TRIGGER": {
+        "telemetry": true,
+        "actions": {
+          "change": {
+            "deviceName": "leftIntakeMotor",
+            "behavior": "REVERSE",
+            "deviceName2": "rightIntakeMotor",
+            "behavior2": "REVERSE"
+          }
+        }
+      }
+    }
+  }
+}

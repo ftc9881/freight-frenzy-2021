@@ -1,0 +1,40 @@
+{
+  "defaults": {
+    "moveSteering": {
+      "type": "IMU",
+      "imuSensor": "imu_control",
+      "pid": {
+        "kP": 0.01,
+        "kI": 0,
+        "kD": 0
+      }
+    },
+    "turnSteering": {
+      "type": "IMU",
+      "imuSensor": "imu_control",
+      "pid": {
+        "kP": 0.02,
+        "kI": 0,
+        "kD": 0
+      }
+    }
+  },
+  "startState": "moveOut",
+  "states": {
+    "moveOut": {
+      "type": "MOVE",
+      "distance": 2,
+      "movement": {
+        "moveSpeed": 0.5
+      },
+      "transitions": {
+        "end": {
+          "newState": "done"
+        }
+      }
+    },
+    "done": {
+      "type": "TERMINATE"
+    }
+  }
+}

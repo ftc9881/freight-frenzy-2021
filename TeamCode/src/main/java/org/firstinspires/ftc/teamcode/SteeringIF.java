@@ -9,7 +9,9 @@ public interface SteeringIF {
 
     Movement steer(Movement movement);
 
-    Movement turn(double speed, double target, boolean global);
+    Movement turn(double targetAngle, boolean global, double maxError, double minSpeed, double maxSpeed);
 
     void init();
+
+    void update();
 }

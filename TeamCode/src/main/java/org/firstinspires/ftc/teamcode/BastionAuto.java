@@ -45,9 +45,9 @@ import com.qualcomm.robotcore.eventloop.opmode.Disabled;
  * Remove or comment out the @Disabled line to add this opmode to the Driver Station OpMode list
  */
 
-@Autonomous(name="TestAuto", group="Test")
+@Autonomous(name="BastionAuto", group="Test")
 @Disabled
-public class TestAuto extends RobotAuto {
+public class BastionAuto extends RobotAuto {
     @Override
     String getRobotConfigFilename() {
         return "bastionConfig.json";
@@ -55,7 +55,7 @@ public class TestAuto extends RobotAuto {
 
     @Override
     String getAutoPlanFilename() {
-        return "testTurn.json";
+        return "bastionAuto.json";
     }
 
 }

@@ -3,8 +3,8 @@ package org.firstinspires.ftc.teamcode;
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 
 public class Device extends Component implements DeviceIF {
-    public Device(OpMode opMode) {
-        super(opMode);
+    public Device(OpMode opMode, String name) {
+        super(opMode, name);
     }
 
     @Override

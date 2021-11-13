@@ -5,8 +5,8 @@ import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import org.json.JSONObject;
 
 public class DriveTrainMecanum extends DriveTrainQuad {
-    public DriveTrainMecanum(OpMode opMode) {
-        super(opMode);
+    public DriveTrainMecanum(OpMode opMode, String name) {
+        super(opMode, name);
     }
 
     @Override

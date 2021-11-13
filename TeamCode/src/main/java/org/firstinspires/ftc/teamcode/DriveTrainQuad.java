@@ -20,13 +20,13 @@ public abstract class DriveTrainQuad extends Component implements DriveTrainIF {
     private boolean _telemetryPower = false;
     private boolean _telemetryPosition = true;
 
-    public DriveTrainQuad(OpMode opMode) {
-        super(opMode);
+    public DriveTrainQuad(OpMode opMode, String name) {
+        super(opMode, name);
 
-        _leftFrontDrive = new BotMotor("leftFront", opMode);
-        _rightFrontDrive = new BotMotor("rightFront", opMode);
-        _leftBackDrive = new BotMotor("leftBack", opMode);
-        _rightBackDrive = new BotMotor("rightBack", opMode);
+        _leftFrontDrive = new BotMotor(opMode, "leftFront");
+        _rightFrontDrive = new BotMotor(opMode, "rightFront");
+        _leftBackDrive = new BotMotor(opMode, "leftBack");
+        _rightBackDrive = new BotMotor(opMode, "rightBack");
     }
 
     @Override

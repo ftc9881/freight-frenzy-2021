@@ -31,7 +31,9 @@ package org.firstinspires.ftc.teamcode;
 
 import com.qualcomm.hardware.bosch.BNO055IMU;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
+import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
+import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.util.ElapsedTime;
 import com.qualcomm.robotcore.util.RobotLog;
@@ -57,39 +59,18 @@ import org.firstinspires.ftc.robotcore.external.navigation.Orientation;
  * Remove or comment out the @Disabled line to add this opmode to the Driver Station OpMode list
  */
 
-@Autonomous(name="SimpleTestIMU", group="Linear Opmode")
+@TeleOp(name="SimpleTestIMU", group="Linear Opmode")
 //@Disabled
 public class SimpleTestIMU extends LinearOpMode {
     private static final String CLASS_NAME = "SimpleTestIMU";
 
     // Declare OpMode members.
     private ElapsedTime runtime = new ElapsedTime();
-    private DcMotor leftFrontDrive = null;
-    private DcMotor rightFrontDrive = null;
-    private DcMotor leftBackDrive = null;
-    private DcMotor rightBackDrive = null;
-
-    private DcMotor intakeMotor = null;
 
     @Override
     public void runOpMode() {
         telemetry.addData("Status", "Initialized");
         telemetry.update();
-
-        // Initialize the hardware variables. Note that the strings used here as parameters
-        // to 'get' must correspond to the names assigned during the robot configuration
-        // step (using the FTC Robot Controller app on the phone).
-        leftFrontDrive  = hardwareMap.get(DcMotor.class, "left_front_drive");
-        rightFrontDrive = hardwareMap.get(DcMotor.class, "right_front_drive");
-        leftBackDrive  = hardwareMap.get(DcMotor.class, "left_back_drive");
-        rightBackDrive = hardwareMap.get(DcMotor.class, "right_back_drive");
-
-        // Most robots need the motor on one side to be reversed to drive forward
-        // Reverse the motor that runs backwards when connected directly to the battery
-        leftFrontDrive.setDirection(DcMotor.Direction.FORWARD);
-        rightFrontDrive.setDirection(DcMotor.Direction.REVERSE);
-        leftBackDrive.setDirection(DcMotor.Direction.FORWARD);
-        rightBackDrive.setDirection(DcMotor.Direction.REVERSE);
 
         BNO055IMU imu = hardwareMap.get(BNO055IMU.class, "imu_control");
 
@@ -108,10 +89,10 @@ public class SimpleTestIMU extends LinearOpMode {
 
         // run until the end of the match (driver presses STOP)
         while (opModeIsActive()) {
-            leftFrontDrive.setPower(.5);
-            rightFrontDrive.setPower(-.5);
-            leftBackDrive.setPower(.5);
-            rightBackDrive.setPower(-.5);
+//            leftFrontDrive.setPower(.5);
+//            rightFrontDrive.setPower(-.5);
+//            leftBackDrive.setPower(.5);
+//            rightBackDrive.setPower(-.5);
 
             Orientation angles;
 
@@ -137,9 +118,9 @@ public class SimpleTestIMU extends LinearOpMode {
 //            RobotLog.dd(CLASS_NAME, "XYX: %.2f\tZYZ: %.2f\tXZY: %.2f\tXYZ: %.2f\tYXZ: %.2f\tYZX: %.2f\tZYX: %.2f\tZXY: %.2f",
 //                    XYX,ZYZ, XZY, XYZ, YXZ, YZX, ZYX, ZXY);
 
-            VectorF normal = new VectorF(1, 0, 0, 1);
+            VectorF normal = new VectorF(0, 1, 0, 1);
             VectorF xformed = imu.getAngularOrientation().getRotationMatrix().transform(normal);
-            double heading = 180 * Math.atan2(xformed.get(0), xformed.get(2)) / Math.PI;
+            double heading = 180 * Math.atan2(xformed.get(0), xformed.get(1)) / Math.PI;
 
             RobotLog.dd(CLASS_NAME, "X: %.2f Y: %.2f Z: %.2f Theta: %.2f", xformed.get(0), xformed.get(1), xformed.get(2),
                     heading);

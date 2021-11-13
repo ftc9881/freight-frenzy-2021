@@ -22,14 +22,14 @@ public abstract class RobotTeleOp extends RobotBase {
         _controllerTwo = controller;
     }
 
-    private ControllerIF constructController(JSONObject jsonObject, Map<String, DeviceIF> devices) throws JSONException, ConfigurationException {
+    private ControllerIF constructController(JSONObject jsonObject, Map<String, DeviceIF> devices, String name) throws JSONException, ConfigurationException {
         String controllerTypeName = jsonObject.getString("type");
 
         ComponentFactoryIF.ControllerType controllerType = ComponentFactoryIF.ControllerType.valueOf(controllerTypeName);
 
         RobotLog.dd(CLASS_NAME, "controllerType: %s", controllerType);
 
-        ControllerIF controller = _componentFactory.controllerInstance(controllerType, this);
+        ControllerIF controller = _componentFactory.controllerInstance(controllerType, this, name);
 
         controller.configure(jsonObject, devices);
 
@@ -44,12 +44,12 @@ public abstract class RobotTeleOp extends RobotBase {
             // Configure controllers
 
             if(jsonObject.has("controllerOne")) {
-                ControllerIF controllerOne = constructController(jsonObject.getJSONObject("controllerOne"), _devices);
+                ControllerIF controllerOne = constructController(jsonObject.getJSONObject("controllerOne"), _devices, "controllerOne");
                 setControllerOne(controllerOne);
             }
 
             if(jsonObject.has("controllerTwo")) {
-                ControllerIF controllerTwo = constructController(jsonObject.getJSONObject("controllerTwo"), _devices);
+                ControllerIF controllerTwo = constructController(jsonObject.getJSONObject("controllerTwo"), _devices, "controllerTwo");
                 setControllerTwo(controllerTwo);
             }
         } catch (JSONException e) {
@@ -117,6 +117,8 @@ public abstract class RobotTeleOp extends RobotBase {
             Movement movementBoth = Movement.combine(movementOne, movementTwo);
 
             _driveTrain.updateMovement(movementBoth);
+
+            telemetry.clearAll();
 
             addTelemetryData(telemetry);
 

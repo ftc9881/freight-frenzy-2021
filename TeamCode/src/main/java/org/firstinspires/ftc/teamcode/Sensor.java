@@ -10,8 +10,8 @@ import java.util.Map;
 public class Sensor extends Component implements SensorIF {
     // TODO: Support multi-threaded sensors
 
-    public Sensor(OpMode opMode) {
-        super(opMode);
+    public Sensor(OpMode opMode, String name) {
+        super(opMode, name);
     }
 
     @Override

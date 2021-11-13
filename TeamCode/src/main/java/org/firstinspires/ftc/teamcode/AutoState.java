@@ -14,7 +14,7 @@ import java.util.Map;
 public abstract class AutoState implements AutoStateIF {
     private static final String CLASS_NAME = "AutoState";
 
-    private OpMode _opMode;
+    protected OpMode _opMode;
 
     Map<String, Transition> _transitions = new HashMap<>();
 
@@ -84,7 +84,7 @@ public abstract class AutoState implements AutoStateIF {
     }
 
     @Override
-    public String doState(RobotBase robotBase, Map<String, Object> propertyValues) {
+    public String doState(RobotBase robotBase, Map<String, Object> propertyValues) throws InterruptedException {
         init();
 
         boolean active = true;
@@ -115,7 +115,7 @@ public abstract class AutoState implements AutoStateIF {
         _initTime = System.currentTimeMillis();
     }
 
-    protected boolean doAction() {
+    protected boolean doAction() throws InterruptedException {
         long elapsedTime = System.currentTimeMillis() - _initTime;
 
         return elapsedTime < _maxMilliseconds;

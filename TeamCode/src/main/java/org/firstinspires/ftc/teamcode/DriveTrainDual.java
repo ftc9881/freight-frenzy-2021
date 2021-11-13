@@ -18,11 +18,11 @@ public abstract class DriveTrainDual extends Component implements DriveTrainIF {
     private boolean _telemetryPower = false;
     private boolean _telemetryPosition = true;
 
-    public DriveTrainDual(OpMode opMode) {
-        super(opMode);
+    public DriveTrainDual(OpMode opMode, String name) {
+        super(opMode, name);
 
-        _leftDrive = new BotMotor("left", opMode);
-        _rightDrive = new BotMotor("right", opMode);
+        _leftDrive = new BotMotor(opMode, "left");
+        _rightDrive = new BotMotor(opMode, "right");
     }
 
     @Override
@@ -119,7 +119,7 @@ public abstract class DriveTrainDual extends Component implements DriveTrainIF {
     }
 
     public void logPositions() {
-        RobotLog.dd(CLASS_NAME, "logDistances()::l: %.2f r: %.2f",
+        RobotLog.dd(CLASS_NAME, "logPositions()::l: %.2f r: %.2f",
                 _leftDrive.getCurrentPosition(),
                 _rightDrive.getCurrentPosition()
         );

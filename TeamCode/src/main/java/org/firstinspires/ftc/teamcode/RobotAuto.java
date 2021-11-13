@@ -20,10 +20,56 @@ public abstract class RobotAuto extends RobotBase {
     String _firstState = null;
     String _startState = null;
 
+    /**
+     * The default SteeringIF to use when moving
+     */
+    SteeringIF _moveSteering;
+
+    /**
+     * The default SteeringIF to use when turning
+     */
+    SteeringIF _turnSteering;
+
+    private SteeringIF createSteering(JSONObject jsonObject, Map<String, SensorIF> sensors) throws ConfigurationException {
+        try {
+            String steeringTypeName = jsonObject.getString("type");
+
+            Steering.SteeringType steeringType = Steering.SteeringType.valueOf(steeringTypeName);
+
+            SteeringIF steering = Steering.constructSteering(steeringType);
+
+            steering.configure(jsonObject, sensors);
+
+            return steering;
+        } catch (JSONException e) {
+            throw new ConfigurationException(e.getMessage(), e);
+        }
+    }
+
+    public void configureDefaults(JSONObject jsonObject,
+                                Map<String, DeviceIF> devices,
+                                Map<String, SensorIF> sensors)
+            throws ConfigurationException {
+        try {
+            if (jsonObject.has("moveSteering")) {
+                _moveSteering = createSteering(jsonObject.getJSONObject("moveSteering"), sensors);
+            }
+
+            if (jsonObject.has("turnSteering")) {
+                _turnSteering = createSteering(jsonObject.getJSONObject("turnSteering"), sensors);
+            }
+
+        } catch (JSONException e) {
+            throw new ConfigurationException(e.getMessage(), e);
+        }
+    }
+
     public void configureStates(JSONObject jsonObject,
-                                  DriveTrainIF driveTrain,
-                                  Map<String, DeviceIF> devices,
-                                  Map<String, SensorIF> sensors)
+                                DriveTrainIF driveTrain,
+                                Map<String, DeviceIF> devices,
+                                Map<String, SensorIF> sensors,
+                                SteeringIF moveSteering,
+                                SteeringIF turnSteering)
             throws ConfigurationException {
         try {
             JSONArray autoStateNames = jsonObject.names();
@@ -41,7 +87,11 @@ public abstract class RobotAuto extends RobotBase {
 
                 RobotLog.dd(CLASS_NAME, "autoStateType: %s", autoStateType);
 
-                AutoStateIF autoState = _autoStateFactory.autoStateInstance(autoStateType, this);
+                AutoStateIF autoState = _autoStateFactory.autoStateInstance(autoStateType,
+                        this,
+                        moveSteering,
+                        turnSteering
+                );
 
                 autoState.configure(autoStateConfig, driveTrain, devices, sensors);
 
@@ -59,13 +109,19 @@ public abstract class RobotAuto extends RobotBase {
             throws ConfigurationException {
         try {
             // Configure controllers
+            if(jsonObject.has("defaults")) {
+                configureDefaults(jsonObject.getJSONObject("defaults"), devices, sensors);
+            }
 
             if(jsonObject.has("startState")) {
                 _startState = jsonObject.getString("startState");
             }
 
             if(jsonObject.has("states")) {
-                configureStates(jsonObject.getJSONObject("states"), driveTrain, devices, sensors);
+                configureStates(jsonObject.getJSONObject("states"), driveTrain, devices, sensors,
+                        _moveSteering,
+                        _turnSteering
+                );
             }
 
         } catch (JSONException e) {
@@ -143,7 +199,9 @@ public abstract class RobotAuto extends RobotBase {
             }
             else {
                 Map<String, Object> effPropertyValues = new HashMap<>();
-                currentState = autoState.doState(this, effPropertyValues);
+                synchronized(this) {
+                    currentState = autoState.doState(this, effPropertyValues);
+                }
             }
         }
 

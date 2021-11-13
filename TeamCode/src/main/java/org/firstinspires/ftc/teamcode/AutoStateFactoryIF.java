@@ -7,9 +7,12 @@ public interface AutoStateFactoryIF {
         MOVE,
         TURN,
         MOTOR,
-        WAIT,
+        PAUSE,
         TERMINATE
     }
 
-    AutoStateIF autoStateInstance(AutoStateType autoStateType, OpMode opMode);
+    AutoStateIF autoStateInstance(AutoStateType autoStateType, OpMode opMode,
+                                  SteeringIF moveSteering,
+                                  SteeringIF turnSteering
+    );
 }

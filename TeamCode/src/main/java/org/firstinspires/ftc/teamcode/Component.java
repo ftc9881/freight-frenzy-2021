@@ -13,8 +13,11 @@ public class Component implements ComponentIF {
     protected boolean _log = false;
     protected boolean _telemetry = false;
 
-    public Component(OpMode opMode) {
+    protected String _name;
+
+    public Component(OpMode opMode, String name) {
         _opMode = opMode;
+        _name = name;
     }
 
     @Override

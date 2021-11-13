@@ -36,7 +36,7 @@ public abstract class RobotBase extends LinearOpMode {
 
         RobotLog.dd(CLASS_NAME, "driveTrainType: %s", driveTrainType);
 
-        DriveTrainIF driveTrain = _componentFactory.driveTrainInstance(driveTrainType, this);
+        DriveTrainIF driveTrain = _componentFactory.driveTrainInstance(driveTrainType, this, null);
 
         driveTrain.configure(jsonObject);
 
@@ -57,7 +57,7 @@ public abstract class RobotBase extends LinearOpMode {
 
             RobotLog.dd(CLASS_NAME, "deviceType: %s", deviceType);
 
-            DeviceIF device = _componentFactory.deviceInstance(deviceType, this);
+            DeviceIF device = _componentFactory.deviceInstance(deviceType, this, deviceName);
 
             device.configure(deviceConfig);
 
@@ -79,7 +79,7 @@ public abstract class RobotBase extends LinearOpMode {
 
             RobotLog.dd(CLASS_NAME, "sensorType: %s", sensorType);
 
-            SensorIF sensor = _componentFactory.sensorInstance(sensorType, this);
+            SensorIF sensor = _componentFactory.sensorInstance(sensorType, this, sensorName);
 
             sensor.configure(deviceConfig, devices);
 

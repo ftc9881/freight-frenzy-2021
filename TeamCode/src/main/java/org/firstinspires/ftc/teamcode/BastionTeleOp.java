@@ -31,6 +31,11 @@ package org.firstinspires.ftc.teamcode;
 
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.Disabled;
+import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
+import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
+import com.qualcomm.robotcore.util.RobotLog;
+
+import android.os.Environment;
 
 /**
  * This file contains an minimal example of a Linear "OpMode". An OpMode is a 'program' that runs in either
@@ -45,17 +50,10 @@ import com.qualcomm.robotcore.eventloop.opmode.Disabled;
  * Remove or comment out the @Disabled line to add this opmode to the Driver Station OpMode list
  */
 
-@Autonomous(name="TestAuto", group="Test")
+@TeleOp(name="BastionTeleOp", group="Linear Opmode")
 @Disabled
-public class TestAuto extends RobotAuto {
-    @Override
+public class BastionTeleOp extends RobotTeleOp {
     String getRobotConfigFilename() {
         return "bastionConfig.json";
     }
-
-    @Override
-    String getAutoPlanFilename() {
-        return "testTurn.json";
-    }
-
 }

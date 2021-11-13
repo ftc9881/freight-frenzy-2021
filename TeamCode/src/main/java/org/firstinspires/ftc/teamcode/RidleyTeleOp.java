@@ -29,12 +29,7 @@
 
 package org.firstinspires.ftc.teamcode;
 
-import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
-import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
-import com.qualcomm.robotcore.util.RobotLog;
-
-import android.os.Environment;
 
 /**
  * This file contains an minimal example of a Linear "OpMode". An OpMode is a 'program' that runs in either
@@ -49,10 +44,10 @@ import android.os.Environment;
  * Remove or comment out the @Disabled line to add this opmode to the Driver Station OpMode list
  */
 
-@TeleOp(name="TestTeleOp", group="Linear Opmode")
+@TeleOp(name="RidleyTeleOp", group="Linear Opmode")
 //@Disabled
-public class TestTeleOp extends RobotTeleOp {
+public class RidleyTeleOp extends RobotTeleOp {
     String getRobotConfigFilename() {
-        return "robotConfig.json";
+        return "ridleyConfig.json";
     }
 }

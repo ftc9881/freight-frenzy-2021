@@ -12,7 +12,7 @@ import org.json.JSONObject;
 
 import java.util.Map;
 
-public class SensorIMUNew extends Sensor implements SensorIF {
+public class SensorIMUNew extends Sensor implements SensorIMU_IF {
     private static final String CLASS_NAME = "SensorIMU";
 
     BNO055IMU _imu;
@@ -29,9 +29,12 @@ public class SensorIMUNew extends Sensor implements SensorIF {
     }
 
     private Axis _headingAxis = Axis.X;
+    private Axis _rightAxis = Axis.Y;
 
-    public SensorIMUNew(OpMode opMode) {
-        super(opMode);
+    private boolean _reverse = false;
+
+    public SensorIMUNew(OpMode opMode, String name) {
+        super(opMode, name);
     }
 
     @Override
@@ -64,6 +67,12 @@ public class SensorIMUNew extends Sensor implements SensorIF {
             if (jsonObject.has("headingAxis")) {
                 _headingAxis = Axis.valueOf(jsonObject.getString("headingAxis"));
             }
+            if (jsonObject.has("rightAxis")) {
+                _rightAxis = Axis.valueOf(jsonObject.getString("rightAxis"));
+            }
+            if (jsonObject.has("reverse")) {
+                _reverse = jsonObject.getBoolean("reverse");
+            }
         } catch (JSONException e) {
             throw new ConfigurationException(e.getMessage(), e);
         }
@@ -85,43 +94,56 @@ public class SensorIMUNew extends Sensor implements SensorIF {
             double lastAngle = 0;
 
             /*
-                I do this because of gymbol-lock related problems when interpreting the heading
+                I do this because of gymbal-lock related problems when interpreting the heading
                 axis of the robot when the IMU isn't flat, with Z pointing up.   This code
                 constructs a heading vector, transforms it, and then gets the angle between them
                 on a plane parallel the plane of the robot's rotation.
 
-                This may bnot work for the non-X case since that is the only one tested.
+                This may not work for the non-X case since that is the only one tested.
              */
 
             VectorF normal = null;
-            int firstDim = 0;
-            int secondDim = 0;
+            int forwardDim = 0;
+            int rightDim = 0;
 
             switch (_headingAxis) {
                 case X:
                     normal = new VectorF(1, 0, 0, 1);
-                    firstDim = 0;
-                    secondDim = 2;
+                    forwardDim = 0;
                     break;
                 case Y:
                     normal = new VectorF(0, 1, 0, 1);
-                    firstDim = 1;
-                    secondDim = 2;
+                    forwardDim = 1;
                     break;
                 case Z:
                     normal = new VectorF(0, 0, 1, 1);
-                    firstDim = 0;
-                    secondDim = 1;
+                    forwardDim = 2;
+                    break;
+            }
+
+            switch (_rightAxis) {
+                case X:
+                    rightDim = 0;
+                    break;
+                case Y:
+                    rightDim = 1;
+                    break;
+                case Z:
+                    rightDim = 2;
                     break;
             }
 
             VectorF xformed = _angles.getRotationMatrix().transform(normal);
             VectorF lastXformed = _lastAngles.getRotationMatrix().transform(normal);
 
-            angle = 180 * Math.atan2(xformed.get(firstDim), xformed.get(secondDim)) / Math.PI;
-            lastAngle = 180 * Math.atan2(lastXformed.get(firstDim), lastXformed.get(secondDim)) / Math.PI;
+            angle = 180 * Math.atan2(xformed.get(forwardDim), xformed.get(rightDim)) / Math.PI;
+            lastAngle = 180 * Math.atan2(lastXformed.get(forwardDim), lastXformed.get(rightDim)) / Math.PI;
 
             double deltaAngle = angle - lastAngle;
+
+            if(_reverse) {
+                deltaAngle *= -1;
+            }
 
             if (deltaAngle < -180) {
                 deltaAngle += 360;

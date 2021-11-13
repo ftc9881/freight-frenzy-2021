@@ -8,10 +8,10 @@ import java.util.Map;
 
 public interface AutoStateIF {
     void configure(JSONObject jsonObject,
-                          DriveTrainIF driveTrain,
-                          Map<String, DeviceIF> devices,
-                          Map<String, SensorIF> sensors)
+                   DriveTrainIF driveTrain,
+                   Map<String, DeviceIF> devices,
+                   Map<String, SensorIF> sensors)
             throws ConfigurationException;
 
-    String doState(RobotBase robotBase, Map<String, Object> propertyValues);
+    String doState(RobotBase robotBase, Map<String, Object> propertyValues) throws InterruptedException;
 }
