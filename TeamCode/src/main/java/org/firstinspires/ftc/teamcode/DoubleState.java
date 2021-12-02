@@ -1,7 +1,5 @@
 package org.firstinspires.ftc.teamcode;
 
-import android.graphics.Bitmap;
-
 import com.qualcomm.robotcore.util.RobotLog;
 
 import org.firstinspires.ftc.robotcore.external.Telemetry;
@@ -9,11 +7,16 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
 public class DoubleState extends State {
     double _value = 0;
+
+    enum Activity {
+        CHANGE
+    }
 
     List<ActionIF> _changeActions = new ArrayList<>();
 
@@ -22,15 +25,23 @@ public class DoubleState extends State {
         _value = value;
     }
 
-    void configureAllActions(JSONObject jsonObject, Map<String, DeviceIF> devices) throws ConfigurationException {
-        try {
-            if(jsonObject.has("change")) {
-                RobotLog.dd(this.getClass().getSimpleName(), "Configure change actions");
+    protected void configureAction(JSONObject jsonObject, Map<String, DeviceIF> devices) throws ConfigurationException {
+        String activityName = null;
 
-                _changeActions = configureActions(jsonObject.getJSONObject("change"), devices);
-            }
+        try {
+            activityName = jsonObject.getString("activity");
         } catch (JSONException e) {
-            throw new ConfigurationException(e);
+            throw new ConfigurationException("Missing activity", e);
+        }
+
+        Activity activity = Activity.valueOf(activityName);
+
+        ActionIF action = createAction(jsonObject, devices);
+
+        switch(activity) {
+            case CHANGE:
+                _changeActions.add(action);
+                break;
         }
     }
 
@@ -42,10 +53,14 @@ public class DoubleState extends State {
         if(_value != value) {
             _value = value;
 
+            Map<String, Object> properties = new HashMap<String, Object>();
+
+            properties.put("value", _value);
+
             RobotLog.dd(this.getClass().getSimpleName(), "%s::Process change actions: %f", _name, _value);
 
             for(ActionIF action : _changeActions) {
-                action.process(_value);
+                action.process(properties);
             }
         }
     }

@@ -25,6 +25,11 @@ public abstract class AutoState implements AutoStateIF {
         _opMode = opMode;
     }
 
+    @Override
+    public void setOpMode(OpMode opMode) {
+        _opMode = opMode;
+    }
+
     private void configureTransitions(JSONObject jsonObject,
                                       DriveTrainIF driveTrain,
                                       Map<String, DeviceIF> devices,

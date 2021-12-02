@@ -24,7 +24,7 @@
     },
     "rightIntakeMotor": {
       "type": "MOTOR",
-      "name": "right_intake",
+      "name": "lift_motor",
       "direction": "FORWARD",
       "velocity": false,
       "maxVelocity": 36000,
@@ -34,13 +34,18 @@
     },
     "leftIntakeMotor": {
       "type": "MOTOR",
-      "name": "left_intake",
+      "name": "lift_motor",
       "direction": "REVERSE",
       "velocity": false,
       "maxVelocity": 36000,
       "telemetry": true,
       "speedExponent": 2,
       "speedScale": ".75"
+    },
+    "basketServo": {
+      "type": "SERVO",
+      "name": "basket_servo",
+      "telemetry": true
     }
   },
   "sensors": {
@@ -72,108 +77,109 @@
       "RIGHT_Y": {
         "telemetry": false
       },
+      "A": {
+        "telemetry": true,
+        "actions": [
+          {
+            "activity": "PRESS",
+            "type": "PROPERTY",
+            "deviceName": "[drive_train]",
+            "property": "mode",
+            "value": "micro"
+          },
+          {
+            "activity": "RELEASE",
+            "type": "PROPERTY",
+            "deviceName": "[drive_train]",
+            "property": "mode",
+            "value": "macro"
+          }
+        ]
+      },
+      "B": {
+        "telemetry": true,
+        "actions": [
+          {
+            "activity": "PRESS",
+            "type": "BEHAVIOR",
+            "deviceName": "basketServo",
+            "behavior": "MAXIMUM"
+          },
+          {
+            "activity": "RELEASE",
+            "type": "BEHAVIOR",
+            "deviceName": "basketServo",
+            "behavior": "MINIMUM"
+          }
+        ]
+      },
       "LEFT_BUTTON": {
         "telemetry": true,
-        "actions": {
-          "press": {
+        "actions": [
+          {
+            "activity": "PRESS",
+            "type": "BEHAVIOR",
             "deviceName": "liftMotor",
             "behavior": "REVERSE"
           },
-          "release": {
+          {
+            "activity": "RELEASE",
+            "type": "BEHAVIOR",
             "deviceName": "liftMotor",
             "behavior": "STOP"
           }
-        }
+        ]
       },
       "RIGHT_BUTTON": {
         "telemetry": true,
-        "actions": {
-          "press": {
+        "actions": [
+          {
+            "activity": "PRESS",
+            "type": "BEHAVIOR",
             "deviceName": "liftMotor",
             "behavior": "FORWARD"
           },
-          "release": {
+          {
+            "activity": "RELEASE",
+            "type": "BEHAVIOR",
             "deviceName": "liftMotor",
             "behavior": "STOP"
           }
-        }
+        ]
       },
       "LEFT_TRIGGER": {
         "telemetry": true,
-        "actions": {
-          "change": {
+        "actions": [
+          {
+            "activity": "CHANGE",
+            "type": "BEHAVIOR",
             "deviceName": "leftIntakeMotor",
-            "behavior": "FORWARD",
-            "deviceName2": "rightIntakeMotor",
-            "behavior2": "FORWARD"
+            "behavior": "FORWARD"
+          },
+          {
+            "activity": "CHANGE",
+            "type": "BEHAVIOR",
+            "deviceName": "rightIntakeMotor",
+            "behavior": "FORWARD"
           }
-        }
+        ]
       },
       "RIGHT_TRIGGER": {
         "telemetry": true,
-        "actions": {
-          "change": {
+        "actions": [
+          {
+            "activity": "CHANGE",
+            "type": "BEHAVIOR",
             "deviceName": "leftIntakeMotor",
-            "behavior": "REVERSE",
-            "deviceName2": "rightIntakeMotor",
-            "behavior2": "REVERSE"
-          }
-        }
-      }
-    }
-  }
-,
-  "controllerTwo": {
-    "type": "SHOOTER",
-    "telemetry": true,
-    "controls": {
-      "LEFT_BUTTON": {
-        "telemetry": true,
-        "actions": {
-          "press": {
-            "deviceName": "liftMotor",
             "behavior": "REVERSE"
           },
-          "release": {
-            "deviceName": "liftMotor",
-            "behavior": "STOP"
+          {
+            "activity": "CHANGE",
+            "type": "BEHAVIOR",
+            "deviceName": "rightIntakeMotor",
+            "behavior": "REVERSE"
           }
-        }
-      },
-      "RIGHT_BUTTON": {
-        "telemetry": true,
-        "actions": {
-          "press": {
-            "deviceName": "liftMotor",
-            "behavior": "FORWARD"
-          },
-          "release": {
-            "deviceName": "liftMotor",
-            "behavior": "STOP"
-          }
-        }
-      },
-      "LEFT_TRIGGER": {
-        "telemetry": true,
-        "actions": {
-          "change": {
-            "deviceName": "leftIntakeMotor",
-            "behavior": "FORWARD",
-            "deviceName2": "rightIntakeMotor",
-            "behavior2": "FORWARD"
-          }
-        }
-      },
-      "RIGHT_TRIGGER": {
-        "telemetry": true,
-        "actions": {
-          "change": {
-            "deviceName": "leftIntakeMotor",
-            "behavior": "REVERSE",
-            "deviceName2": "rightIntakeMotor",
-            "behavior2": "REVERSE"
-          }
-        }
+        ]
       }
     }
   }

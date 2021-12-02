@@ -9,13 +9,13 @@ import org.json.JSONObject;
 
 import java.util.Map;
 
-public abstract class DriveTrainQuad extends Component implements DriveTrainIF {
+public abstract class DriveTrainQuad extends Device implements DriveTrainIF {
     private static final String CLASS_NAME = "DriveTrainQuad";
 
-    private BotMotor _leftFrontDrive = null;
-    private BotMotor _rightFrontDrive = null;
-    private BotMotor _leftBackDrive = null;
-    private BotMotor _rightBackDrive = null;
+    private DeviceMotor _leftFrontDrive = null;
+    private DeviceMotor _rightFrontDrive = null;
+    private DeviceMotor _leftBackDrive = null;
+    private DeviceMotor _rightBackDrive = null;
 
     private boolean _telemetryPower = false;
     private boolean _telemetryPosition = true;
@@ -23,10 +23,10 @@ public abstract class DriveTrainQuad extends Component implements DriveTrainIF {
     public DriveTrainQuad(OpMode opMode, String name) {
         super(opMode, name);
 
-        _leftFrontDrive = new BotMotor(opMode, "leftFront");
-        _rightFrontDrive = new BotMotor(opMode, "rightFront");
-        _leftBackDrive = new BotMotor(opMode, "leftBack");
-        _rightBackDrive = new BotMotor(opMode, "rightBack");
+        _leftFrontDrive = new DeviceMotor(opMode, "leftFront");
+        _rightFrontDrive = new DeviceMotor(opMode, "rightFront");
+        _leftBackDrive = new DeviceMotor(opMode, "leftBack");
+        _rightBackDrive = new DeviceMotor(opMode, "rightBack");
     }
 
     @Override
@@ -137,21 +137,29 @@ public abstract class DriveTrainQuad extends Component implements DriveTrainIF {
         return RobotUtil.arrayMean(positions);
     }
 
+    @Override
+    public void behave(ActionIF action, String behavior, Map<String, Object> properties) {
+        _leftFrontDrive.behave(action, behavior, properties);
+        _rightFrontDrive.behave(action, behavior, properties);
+        _leftBackDrive.behave(action, behavior, properties);
+        _rightBackDrive.behave(action, behavior, properties);
+    }
+
     public void logDistances() {
         RobotLog.dd(CLASS_NAME, "logDistances()::lf: %.2f rf: %.2f lb: %.2f rb: %.2f ",
             _leftFrontDrive.getDistance(),
-                    _rightFrontDrive.getDistance(),
-                    _leftBackDrive.getDistance(),
-                    _rightBackDrive.getDistance()
+            _rightFrontDrive.getDistance(),
+            _leftBackDrive.getDistance(),
+            _rightBackDrive.getDistance()
         );
     }
 
     public void logPositions() {
         RobotLog.dd(CLASS_NAME, "logDistances()::lf: %.2f rf: %.2f lb: %.2f rb: %.2f ",
-                _leftFrontDrive.getCurrentPosition(),
-                _rightFrontDrive.getCurrentPosition(),
-                _leftBackDrive.getCurrentPosition(),
-                _rightBackDrive.getCurrentPosition()
+            _leftFrontDrive.getCurrentPosition(),
+            _rightFrontDrive.getCurrentPosition(),
+            _leftBackDrive.getCurrentPosition(),
+            _rightBackDrive.getCurrentPosition()
         );
     }
 

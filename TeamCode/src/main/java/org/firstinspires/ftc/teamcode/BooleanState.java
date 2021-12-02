@@ -7,11 +7,19 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import static org.firstinspires.ftc.teamcode.BooleanState.Activity.*;
+
 public class BooleanState extends State {
     boolean _value = false;
+
+    enum Activity {
+        PRESS,
+        RELEASE
+    }
 
     List<ActionIF> _pressActions = new ArrayList<>();
     List<ActionIF> _releaseActions = new ArrayList<>();
@@ -21,21 +29,26 @@ public class BooleanState extends State {
         _value = value;
     }
 
-    void configureAllActions(JSONObject jsonObject, Map<String, DeviceIF> devices) throws ConfigurationException {
+    protected void configureAction(JSONObject jsonObject, Map<String, DeviceIF> devices) throws ConfigurationException {
+        String activityName = null;
+
         try {
-            if(jsonObject.has("press")) {
-                RobotLog.dd(this.getClass().getSimpleName(), "Configure press actions");
-
-                _pressActions = configureActions(jsonObject.getJSONObject("press"), devices);
-            }
-
-            if(jsonObject.has("release")) {
-                RobotLog.dd(this.getClass().getSimpleName(), "Configure release actions");
-
-                _releaseActions = configureActions(jsonObject.getJSONObject("release"), devices);
-            }
+            activityName = jsonObject.getString("activity");
         } catch (JSONException e) {
-            throw new ConfigurationException(e);
+            throw new ConfigurationException("Missing activity", e);
+        }
+
+        Activity activity = valueOf(activityName);
+
+        ActionIF action = createAction(jsonObject, devices);
+
+        switch(activity) {
+            case PRESS:
+                _pressActions.add(action);
+                break;
+            case RELEASE:
+                _releaseActions.add(action);
+                break;
         }
     }
 
@@ -43,17 +56,21 @@ public class BooleanState extends State {
         if (_value != value) {
             _value = value;
 
+            Map<String, Object> properties = new HashMap<String, Object>();
+
+            properties.put("value", Double.valueOf(_value ? 1 : 0));
+
             if (_value) {
                 RobotLog.dd(this.getClass().getSimpleName(), "%s::Process press actions: %s", _name, _value);
 
                 for (ActionIF action : _pressActions) {
-                    action.process(1);
+                    action.process(properties);
                 }
             } else {
                 RobotLog.dd(this.getClass().getSimpleName(), "%s::Process release actions: %s", _name, _value);
 
                 for (ActionIF action : _releaseActions) {
-                    action.process(0);
+                    action.process(properties);
                 }
             }
         }

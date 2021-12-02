@@ -8,7 +8,8 @@ public interface AutoStateFactoryIF {
         TURN,
         MOTOR,
         PAUSE,
-        TERMINATE
+        TERMINATE,
+        CUSTOM;
     }
 
     AutoStateIF autoStateInstance(AutoStateType autoStateType, OpMode opMode,

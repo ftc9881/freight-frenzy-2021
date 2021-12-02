@@ -125,10 +125,12 @@ public class DeviceMotor extends Device implements DeviceIF {
     }
 
     @Override
-    public void processAction(ActionIF action, double value) {
-        RobotLog.dd(this.getClass().getSimpleName(), "Process action: %s %s %s", _name, action.getBehavior(), value);
+    public void behave(ActionIF action, String behaviorName, Map<String, Object> properties) {
+        RobotLog.dd(this.getClass().getSimpleName(), "Process action: %s %s %s", _name, behaviorName, properties);
 
-        Behavior behavior = Behavior.valueOf(action.getBehavior());
+        Behavior behavior = Behavior.valueOf(behaviorName);
+
+        double value = Double.valueOf(properties.get("value").toString());
 
         switch(behavior) {
             case FORWARD:

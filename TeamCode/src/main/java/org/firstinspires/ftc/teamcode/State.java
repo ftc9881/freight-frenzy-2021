@@ -3,6 +3,7 @@ package org.firstinspires.ftc.teamcode;
 import com.qualcomm.robotcore.util.RobotLog;
 
 import org.firstinspires.ftc.robotcore.external.Telemetry;
+import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -10,97 +11,48 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
-public class State {
+import static org.firstinspires.ftc.teamcode.BooleanState.Activity.valueOf;
+
+public abstract class State {
     boolean _telemetry = false;
 
     String _name = null;
+
+    private ActionFactoryIF _actionFactory = new ActionFactory();
 
     public State(String name) {
         _name = name;
     }
 
-    void configureAllActions(JSONObject actions, Map<String, DeviceIF> devices) throws ConfigurationException {
+    protected abstract void configureAction(JSONObject jsonObject, Map<String, DeviceIF> devices) throws ConfigurationException;
+
+    protected ActionIF createAction(JSONObject jsonObject, Map<String, DeviceIF> devices) throws ConfigurationException {
+        String typeName = null;
+
+        try {
+            typeName = jsonObject.getString("type");
+        } catch (JSONException e) {
+            throw new ConfigurationException("Missing type parameter", e);
+        }
+
+        ActionFactoryIF.ActionType actionType = ActionFactoryIF.ActionType.valueOf(typeName);
+
+        ActionIF action = _actionFactory.actionInstance(actionType);
+
+        action.configure(jsonObject, devices);
+
+        return action;
     }
 
-    List<ActionIF> configureActions(JSONObject jsonObject, Map<String, DeviceIF> devices) throws ConfigurationException {
-        RobotLog.dd(this.getClass().getSimpleName(), "Configure actions");
-
-        /*
-            TODO: Implement multiple actions
-         */
-
-        List<ActionIF> actions = new ArrayList<>();
-
-        String deviceName;
-
-        try {
-            deviceName = jsonObject.getString("deviceName");
-
-            RobotLog.dd(this.getClass().getSimpleName(), "deviceName: " + deviceName);
-        } catch (JSONException e) {
-            throw new ConfigurationException("Missing deviceName parameter", e);
-        }
-
-        DeviceIF device = devices.get(deviceName);
-
-        if(device == null) {
-            throw new ConfigurationException("Invalid deviceName: " + deviceName, null);
-        }
-
-        String behavior;
-
-        try {
-            behavior = jsonObject.getString("behavior");
-        } catch (JSONException e) {
-            throw new ConfigurationException("Missing behavior parameter", e);
-        }
-
-        RobotLog.dd(this.getClass().getSimpleName(), "behavior: " + behavior);
-
-        if(!device.isValidBehavior(behavior)) {
-            throw new ConfigurationException("Invalid behavior for " + deviceName + ": " + behavior, null);
-        }
-
-        Action action = new Action(device, behavior);
-
-        actions.add(action);
-
-        String deviceName2 = null;
-
-        try {
-            deviceName2 = jsonObject.getString("deviceName2");
-
-            RobotLog.dd(this.getClass().getSimpleName(), "deviceName2: " + deviceName);
-        } catch (JSONException e) {
-        }
-
-        if(deviceName2 != null) {
-            DeviceIF device2 = devices.get(deviceName2);
-
-            if (device2 == null) {
-                throw new ConfigurationException("Invalid deviceName2: " + deviceName2, null);
-            }
-
-            String behavior2;
-
+    void configureAllActions(JSONArray actions, Map<String, DeviceIF> devices) throws ConfigurationException {
+        for(int i = 0;i < actions.length();++i) {
             try {
-                behavior2 = jsonObject.getString("behavior2");
+                JSONObject jsonObject = actions.getJSONObject(i);
+                configureAction(jsonObject, devices);
             } catch (JSONException e) {
-                throw new ConfigurationException("Missing behavior2 parameter", e);
+                throw new ConfigurationException("Action not a JSON object", e);
             }
-
-            RobotLog.dd(this.getClass().getSimpleName(), "behavior2: " + behavior2);
-
-            if (!device.isValidBehavior(behavior2)) {
-                throw new ConfigurationException("Invalid behavior2 for " + deviceName2 + ": " + behavior2, null);
-            }
-
-            Action action2 = new Action(device2, behavior2);
-
-            actions.add(action2);
         }
-
-        return(actions);
     }
 
     void configure(JSONObject jsonObject, Map<String, DeviceIF> devices) throws ConfigurationException {
@@ -113,7 +65,7 @@ public class State {
             }
 
             if(jsonObject.has("actions")) {
-                configureAllActions(jsonObject.getJSONObject("actions"), devices);
+                configureAllActions(jsonObject.getJSONArray("actions"), devices);
             }
         } catch (JSONException e) {
             throw new ConfigurationException(e);

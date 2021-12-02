@@ -10,7 +10,8 @@ public interface ComponentFactoryIF {
     }
 
     enum DeviceType {
-        MOTOR
+        MOTOR,
+        SERVO
     }
 
     enum SensorType {

@@ -20,6 +20,8 @@ public class ComponentFactory implements ComponentFactoryIF {
         switch(deviceType) {
             case MOTOR:
                 return new DeviceMotor(opMode, name);
+            case SERVO:
+                return new DeviceServo(opMode, name);
             default:
                 return null;
         }

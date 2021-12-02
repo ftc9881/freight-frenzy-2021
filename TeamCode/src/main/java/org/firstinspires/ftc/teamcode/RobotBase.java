@@ -27,6 +27,8 @@ public abstract class RobotBase extends LinearOpMode {
 
     protected Map<String, SensorIF> _sensors = new HashMap<>();
 
+    protected static final String DRIVE_TRAIN_NAME = "[drive_train]";
+
     boolean _log = false;
 
     private DriveTrainIF constructDriveTrain(JSONObject jsonObject) throws JSONException, ConfigurationException {
@@ -140,6 +142,7 @@ public abstract class RobotBase extends LinearOpMode {
 
     private void setDriveTrain(DriveTrainIF driveTrain) {
         _driveTrain = driveTrain;
+        _devices.put(DRIVE_TRAIN_NAME, driveTrain);
     }
 
     abstract String getRobotConfigFilename();

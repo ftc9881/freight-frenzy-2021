@@ -1,7 +1,11 @@
 package org.firstinspires.ftc.teamcode;
 
-public interface ActionIF {
-    String getBehavior();
+import org.json.JSONObject;
 
-    void process(double value);
+import java.util.Map;
+
+public interface ActionIF {
+    void configure(JSONObject jsonObject, Map<String, DeviceIF> devices) throws ConfigurationException;
+
+    void process(Map<String, Object> properties);
 }

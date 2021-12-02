@@ -9,11 +9,11 @@ import org.json.JSONObject;
 
 import java.util.Map;
 
-public abstract class DriveTrainDual extends Component implements DriveTrainIF {
+public abstract class DriveTrainDual extends Device implements DriveTrainIF {
     private static final String CLASS_NAME = "DriveTrainDual";
 
-    private BotMotor _leftDrive = null;
-    private BotMotor _rightDrive = null;
+    private DeviceMotor _leftDrive = null;
+    private DeviceMotor _rightDrive = null;
 
     private boolean _telemetryPower = false;
     private boolean _telemetryPosition = true;
@@ -21,8 +21,8 @@ public abstract class DriveTrainDual extends Component implements DriveTrainIF {
     public DriveTrainDual(OpMode opMode, String name) {
         super(opMode, name);
 
-        _leftDrive = new BotMotor(opMode, "left");
-        _rightDrive = new BotMotor(opMode, "right");
+        _leftDrive = new DeviceMotor(opMode, "left");
+        _rightDrive = new DeviceMotor(opMode, "right");
     }
 
     @Override
@@ -109,6 +109,12 @@ public abstract class DriveTrainDual extends Component implements DriveTrainIF {
         }
 
         return RobotUtil.arrayMean(positions);
+    }
+
+    @Override
+    public void behave(ActionIF action, String behavior, Map<String, Object> properties) {
+        _leftDrive.behave(action, behavior, properties);
+        _rightDrive.behave(action, behavior, properties);
     }
 
     public void logDistances() {

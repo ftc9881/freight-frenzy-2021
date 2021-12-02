@@ -19,24 +19,26 @@ public class DriveTrainTank extends DriveTrainDual {
 
     @Override
     public void updateMovement(Movement movement) {
-        double moveSpeed = movement._moveSpeed;
-        double moveAngle = movement._moveAngle;
-        double turnSpeed = movement._turnSpeed;
+        if(movement != null) {
+            double moveSpeed = movement._moveSpeed;
+            double moveAngle = movement._moveAngle;
+            double turnSpeed = movement._turnSpeed;
 
-        double leftPower = moveSpeed + turnSpeed;
-        double rightPower = moveSpeed - turnSpeed;
+            double leftPower = moveSpeed + turnSpeed;
+            double rightPower = moveSpeed - turnSpeed;
 
-        if(leftPower > 1) leftPower = 1;
-        else if(leftPower <-1) leftPower = -1;
+            if (leftPower > 1) leftPower = 1;
+            else if (leftPower < -1) leftPower = -1;
 
-        if(rightPower > 1) rightPower = 1;
-        else if(rightPower <-1) rightPower = -1;
+            if (rightPower > 1) rightPower = 1;
+            else if (rightPower < -1) rightPower = -1;
 
-        RobotLog.dd(CLASS_NAME, "updateMovement()::leftPower: %.2f rightPower: %.2f", leftPower, rightPower);
+            RobotLog.dd(CLASS_NAME, "updateMovement()::leftPower: %.2f rightPower: %.2f", leftPower, rightPower);
 
-        //  Send calculated power to wheels
+            //  Send calculated power to wheels
 
-        setPower(leftPower, rightPower);
+            setPower(leftPower, rightPower);
+        }
     }
 
 }

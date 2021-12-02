@@ -2,6 +2,8 @@ package org.firstinspires.ftc.teamcode;
 
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 
+import java.util.Map;
+
 public class Device extends Component implements DeviceIF {
     public Device(OpMode opMode, String name) {
         super(opMode, name);
@@ -13,6 +15,6 @@ public class Device extends Component implements DeviceIF {
     }
 
     @Override
-    public void processAction(ActionIF action, double value) {
+    public void behave(ActionIF action, String behavior, Map<String, Object> properties) {
     }
 }

@@ -15,6 +15,7 @@ public class ControllerTankDual extends Controller implements ControllerIF {
     public ControllerTankDual(OpMode opMode, String name) {
         super(opMode, name);
     }
+
     private Movement _movement = new Movement(0, 0, 0);
 
     @Override

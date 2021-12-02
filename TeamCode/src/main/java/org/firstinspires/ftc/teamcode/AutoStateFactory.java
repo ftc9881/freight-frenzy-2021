@@ -18,6 +18,8 @@ public class AutoStateFactory implements AutoStateFactoryIF {
                 return new AutoStatePause(opMode);
             case TERMINATE:
                 return new AutoStateTerminate(opMode);
+            case CUSTOM:
+                return new AutoStateCustom(opMode);
             default:
                 return null;
         }
