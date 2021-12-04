@@ -58,7 +58,7 @@
       "xAxis": "Z",
       "yAxis": "Y",
       "zAxis": "X",
-      "reverse": true
+      "reverse": false
     }
   },
   "controllerOne": {
