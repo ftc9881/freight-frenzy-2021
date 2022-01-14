@@ -19,6 +19,19 @@ public class DeviceServo extends Device implements DeviceIF {
 
     double _positionIncrement = .1;
 
+    private enum Behavior {
+        MAXIMUM,
+        MINIMUM,
+        FORWARD,
+        REVERSE
+    }
+
+    private enum Parameter {
+        MIN_POSITION,
+        MAX_POSITION,
+        POSITION_INCREMENT
+    }
+
     public DeviceServo(OpMode opMode, String name) {
         super(opMode, name);
 
@@ -47,13 +60,6 @@ public class DeviceServo extends Device implements DeviceIF {
         } catch (JSONException e) {
             throw new ConfigurationException(e.getMessage(), e);
         }
-    }
-
-    private enum Behavior {
-        MAXIMUM,
-        MINIMUM,
-        FORWARD,
-        REVERSE
     }
 
     @Override
@@ -105,4 +111,48 @@ public class DeviceServo extends Device implements DeviceIF {
                 break;
         }
     }
+
+    @Override
+    public boolean isValidParameter(String parameter) {
+        try {
+            Parameter.valueOf(parameter);
+            return true;
+        } catch (IllegalArgumentException ex) {
+            return super.isValidParameter(parameter);
+        }
+    }
+
+    @Override
+    public void setParameter(String parameterName, String value) {
+        RobotLog.dd(this.getClass().getSimpleName(), "Set parameter: %s %s %s", _name, parameterName, value);
+
+        Parameter parameter = Parameter.valueOf(parameterName);
+
+        // Have the ability to configure multiple parameters
+
+        double doubleValue = Double.valueOf(value).doubleValue();
+
+        switch(parameter) {
+            case MAX_POSITION:
+                _maxPosition = doubleValue;
+                break;
+            case MIN_POSITION:
+                _minPosition = doubleValue;
+                break;
+            case POSITION_INCREMENT:
+                _positionIncrement = doubleValue;
+                break;
+        }
+    }
+
+
+    public void init() {
+    }
+
+    public void update() {
+    }
+
+    public void terminate() {
+    }
+
 }

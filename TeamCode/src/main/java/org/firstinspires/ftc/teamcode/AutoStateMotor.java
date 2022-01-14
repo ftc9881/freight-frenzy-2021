@@ -54,7 +54,7 @@ public class AutoStateMotor extends AutoState implements AutoStateIF {
 
         RobotLog.dd(CLASS_NAME, "init()");
 
-        _deviceMotor.resetPosition();
+        _deviceMotor.init();
     }
 
     public boolean doAction() throws InterruptedException {

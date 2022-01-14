@@ -89,4 +89,14 @@ public class BotServo extends Component {
 
         values.put(prefix + "position", getPosition());
     }
+
+
+    public void init() {
+    }
+
+    public void update() {
+    }
+
+    public void terminate() {
+    }
 }

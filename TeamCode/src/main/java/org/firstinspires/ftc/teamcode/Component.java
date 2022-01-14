@@ -8,7 +8,7 @@ import org.json.JSONObject;
 
 import java.util.Map;
 
-public class Component implements ComponentIF {
+public abstract class Component implements ComponentIF {
     public final OpMode _opMode;
     protected boolean _log = false;
     protected boolean _telemetry = false;

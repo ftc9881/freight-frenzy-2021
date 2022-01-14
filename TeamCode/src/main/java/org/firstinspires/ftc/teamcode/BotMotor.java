@@ -22,6 +22,9 @@ public class BotMotor extends Component {
     private double _maxVelocity = 36000;  // 360 degrees * 6000 RPM / (60 S/M)
     private int _clicksPerMeter = 1500;
 
+    private int _minPosition = Integer.MIN_VALUE;
+    private int _maxPosition = Integer.MAX_VALUE;
+
     private DcMotor.RunMode _mode = DcMotor.RunMode.RUN_WITHOUT_ENCODER;
 
     private int _basePosition = 0;
@@ -155,6 +158,14 @@ public class BotMotor extends Component {
         return ((double)getCurrentPosition()) / _clicksPerMeter;
     }
 
+    public void setMaxPosition(int maxPosition) {
+        _maxPosition = maxPosition;
+    }
+
+    public void setMinPosition(int minPosition) {
+        _minPosition = minPosition;
+    }
+
     public double getVelocity() {
         return ((DcMotorEx)_dcMotor).getVelocity();
     }
@@ -181,5 +192,15 @@ public class BotMotor extends Component {
         values.put(prefix + "position", getCurrentPosition());
         values.put(prefix + "velocity", getVelocity());
         values.put(prefix + "distance", getDistance());
+    }
+
+    public void init() {
+        resetPosition();
+    }
+
+    public void update() {
+    }
+
+    public void terminate() {
     }
 }

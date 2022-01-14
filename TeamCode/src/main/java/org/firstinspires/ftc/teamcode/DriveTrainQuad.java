@@ -145,6 +145,26 @@ public abstract class DriveTrainQuad extends Device implements DriveTrainIF {
         _rightBackDrive.behave(action, behavior, properties);
     }
 
+    @Override
+    public boolean isValidParameter(String parameter) {
+        try {
+            DeviceMotor.Parameter.valueOf(parameter);
+            return true;
+        } catch (IllegalArgumentException ex) {
+            return super.isValidParameter(parameter);
+        }
+    }
+
+    @Override
+    public void setParameter(String parameterName, String value) {
+        RobotLog.dd(this.getClass().getSimpleName(), "Set parameter: %s %s %s", _name, parameterName, value);
+
+        _leftFrontDrive.setParameter(parameterName, value);
+        _rightFrontDrive.setParameter(parameterName, value);
+        _leftBackDrive.setParameter(parameterName, value);
+        _rightBackDrive.setParameter(parameterName, value);
+    }
+
     public void logDistances() {
         RobotLog.dd(CLASS_NAME, "logDistances()::lf: %.2f rf: %.2f lb: %.2f rb: %.2f ",
             _leftFrontDrive.getDistance(),
@@ -203,4 +223,15 @@ public abstract class DriveTrainQuad extends Device implements DriveTrainIF {
         values.put("minDistance", minDistance);
         values.put("meanDistance", meanDistance);
     }
+
+    public void init() {
+        resetPositions();
+    }
+
+    public void update() {
+    }
+
+    public void terminate() {
+    }
+
 }

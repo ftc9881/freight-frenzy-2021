@@ -117,6 +117,25 @@ public abstract class DriveTrainDual extends Device implements DriveTrainIF {
         _rightDrive.behave(action, behavior, properties);
     }
 
+    @Override
+    public boolean isValidParameter(String parameter) {
+        try {
+            DeviceMotor.Parameter.valueOf(parameter);
+            return true;
+        } catch (IllegalArgumentException ex) {
+            return super.isValidParameter(parameter);
+        }
+    }
+
+    @Override
+    public void setParameter(String parameterName, String value) {
+        RobotLog.dd(this.getClass().getSimpleName(), "Set parameter: %s %s %s", _name, parameterName, value);
+
+        _leftDrive.setParameter(parameterName, value);
+        _rightDrive.setParameter(parameterName, value);
+    }
+
+
     public void logDistances() {
         RobotLog.dd(CLASS_NAME, "logDistances()::l: %.2f r: %.2f",
                 _leftDrive.getDistance(),
@@ -166,5 +185,15 @@ public abstract class DriveTrainDual extends Device implements DriveTrainIF {
         values.put("maxDistance", maxDistance);
         values.put("minDistance", minDistance);
         values.put("meanDistance", meanDistance);
+    }
+
+    public void init() {
+        resetPositions();
+    }
+
+    public void update() {
+    }
+
+    public void terminate() {
     }
 }

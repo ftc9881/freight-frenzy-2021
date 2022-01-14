@@ -11,4 +11,10 @@ public interface ComponentIF {
     void addTelemetryData(Telemetry telemetry);
 
     void getPropertyValues(Map<String, Object> values);
+
+    void init();
+
+    void update();
+
+    void terminate();
 }

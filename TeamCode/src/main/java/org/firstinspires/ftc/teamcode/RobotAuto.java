@@ -6,121 +6,60 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import java.io.IOException;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 
 public abstract class RobotAuto extends RobotBase {
     private static final String CLASS_NAME = "RobotAuto";
 
-    public AutoStateFactoryIF _autoStateFactory = new AutoStateFactory();
+    private ArrayList<String> _autoPlanNames = new ArrayList<String>();
+    private HashMap<String, AutonomousPlan> _autoPlans = new HashMap<String, AutonomousPlan>();
 
-    Map<String, AutoStateIF> _autoStates = new HashMap<>();
+    private void configureAutonomousPlans(JSONObject jsonObject,
+                                          DriveTrainIF driveTrain,
+                                          Map<String, DeviceIF> devices,
+                                          Map<String, SensorIF> sensors) throws JSONException, ConfigurationException {
+        RobotLog.dd(CLASS_NAME, "Configure AutonomousPlans");
 
-    String _firstState = null;
-    String _startState = null;
+        JSONArray autoModeNames = jsonObject.names();
 
-    /**
-     * The default SteeringIF to use when moving
-     */
-    SteeringIF _moveSteering;
+        for(int i = 0; i < autoModeNames.length(); ++i) {
+            String autoModeName = autoModeNames.getString(i);
 
-    /**
-     * The default SteeringIF to use when turning
-     */
-    SteeringIF _turnSteering;
+            JSONObject autoModeJSON = jsonObject.getJSONObject(autoModeName);
 
-    private SteeringIF createSteering(JSONObject jsonObject, Map<String, SensorIF> sensors) throws ConfigurationException {
-        try {
-            String steeringTypeName = jsonObject.getString("type");
+            String autoName = autoModeJSON.getString("name");
+            String autoFileName = autoModeJSON.getString("fileName");
 
-            Steering.SteeringType steeringType = Steering.SteeringType.valueOf(steeringTypeName);
+            RobotLog.dd(CLASS_NAME, "autoName: %s", autoName);
+            RobotLog.dd(CLASS_NAME, "autoFileName: %s", autoFileName);
 
-            SteeringIF steering = Steering.constructSteering(steeringType);
+            AutonomousPlan autoPlan = new AutonomousPlan();
 
-            steering.configure(jsonObject, sensors);
+            autoPlan.readAutoPlan(
+                    autoFileName,
+                    BASE_PATH,
+                    this,
+                    driveTrain,
+                    devices,
+                    sensors);
 
-            return steering;
-        } catch (JSONException e) {
-            throw new ConfigurationException(e.getMessage(), e);
+            _autoPlans.put(autoModeName, autoPlan);
+            _autoPlanNames.add(autoModeName);
         }
     }
 
-    public void configureDefaults(JSONObject jsonObject,
-                                Map<String, DeviceIF> devices,
-                                Map<String, SensorIF> sensors)
-            throws ConfigurationException {
+    public void configure(JSONObject jsonObject) throws ConfigurationException {
+        super.configure(jsonObject);
+
         try {
-            if (jsonObject.has("moveSteering")) {
-                _moveSteering = createSteering(jsonObject.getJSONObject("moveSteering"), sensors);
-            }
-
-            if (jsonObject.has("turnSteering")) {
-                _turnSteering = createSteering(jsonObject.getJSONObject("turnSteering"), sensors);
-            }
-
-        } catch (JSONException e) {
-            throw new ConfigurationException(e.getMessage(), e);
-        }
-    }
-
-    public void configureStates(JSONObject jsonObject,
-                                DriveTrainIF driveTrain,
-                                Map<String, DeviceIF> devices,
-                                Map<String, SensorIF> sensors,
-                                SteeringIF moveSteering,
-                                SteeringIF turnSteering)
-            throws ConfigurationException {
-        try {
-            JSONArray autoStateNames = jsonObject.names();
-
-            _firstState = autoStateNames.getString(0);
-
-            for(int i = 0; i < autoStateNames.length(); ++i) {
-                String autoStateName = autoStateNames.getString(i);
-
-                JSONObject autoStateConfig = jsonObject.getJSONObject(autoStateName);
-
-                String autoStateTypeName = autoStateConfig.getString("type");
-
-                AutoStateFactoryIF.AutoStateType autoStateType = AutoStateFactoryIF.AutoStateType.valueOf(autoStateTypeName);
-
-                RobotLog.dd(CLASS_NAME, "autoStateType: %s", autoStateType);
-
-                AutoStateIF autoState = _autoStateFactory.autoStateInstance(autoStateType,
-                        this,
-                        moveSteering,
-                        turnSteering
-                );
-
-                autoState.configure(autoStateConfig, driveTrain, devices, sensors);
-
-                _autoStates.put(autoStateName, autoState);
-            }
-        } catch (JSONException e) {
-            throw new ConfigurationException(e.getMessage(), e);
-        }
-    }
-
-    public void configureAutoPlan(JSONObject jsonObject,
-                                  DriveTrainIF driveTrain,
-                                  Map<String, DeviceIF> devices,
-                                  Map<String, SensorIF> sensors)
-            throws ConfigurationException {
-        try {
-            // Configure controllers
-            if(jsonObject.has("defaults")) {
-                configureDefaults(jsonObject.getJSONObject("defaults"), devices, sensors);
-            }
-
-            if(jsonObject.has("startState")) {
-                _startState = jsonObject.getString("startState");
-            }
-
-            if(jsonObject.has("states")) {
-                configureStates(jsonObject.getJSONObject("states"), driveTrain, devices, sensors,
-                        _moveSteering,
-                        _turnSteering
+            if(jsonObject.has("autonomousModes")) {
+                configureAutonomousPlans(
+                        jsonObject.getJSONObject("autonomousModes"),
+                        _driveTrain,
+                        _devices,
+                        _sensors
                 );
             }
 
@@ -128,83 +67,67 @@ public abstract class RobotAuto extends RobotBase {
             throw new ConfigurationException(e.getMessage(), e);
         }
     }
-
-    public void readAutoPlan(String autoPlanFile, String baseConfigPath,
-                             DriveTrainIF driveTrain,
-                             Map<String, DeviceIF> devices,
-                             Map<String, SensorIF> sensors) throws ConfigurationException {
-        if (baseConfigPath == null) {
-            baseConfigPath = BASE_PATH;
-        }
-
-        String autoPlanFileFull = baseConfigPath + "/" + autoPlanFile;
-
-        RobotLog.dd(CLASS_NAME, "autoPlanFileFull: %s", autoPlanFileFull);
-
-        try {
-            JSONObject jsonObject = JSONUtil.getJsonObject(autoPlanFileFull);
-
-            configureAutoPlan(jsonObject, driveTrain, devices, sensors);
-        } catch (JSONException | IOException e) {
-            throw new ConfigurationException(e.getMessage(), e);
-        }
-    }
-
-    abstract String getAutoPlanFilename();
 
     @Override
     public void runOpMode() throws InterruptedException {
         super.runOpMode();
 
-        try {
-            telemetry.addData("Status", "Read auto plan");
+        int indexSelected = 0;
+
+        boolean upStateOld = false;
+        boolean downStateOld = false;
+
+        telemetry.addLine("Select Autonomous Plan");
+        telemetry.update();
+
+        while(true) {
+            for(int i = 0;i < _autoPlanNames.size();++i) {
+                telemetry.addData(_autoPlanNames.get(i), i == indexSelected ? '*' : ' ');
+            }
             telemetry.update();
 
-            readAutoPlan(getAutoPlanFilename(), null, _driveTrain, _devices, _sensors);
+            if(gamepad1.a) {
+                break;
+            }
 
-            telemetry.addData("Status", "Auto plan loaded");
-            telemetry.update();
-        } catch (ConfigurationException e) {
-            e.printStackTrace();
-            telemetry.addData("ConfigurationException",  e.getMessage());
-            telemetry.update();
+            boolean upStateNew = gamepad1.dpad_up;
+            boolean downStateNew = gamepad1.dpad_down;
+
+            if(downStateNew && !downStateOld) {
+                indexSelected = indexSelected + 1;
+                if(indexSelected == _autoPlans.size()) {
+                    indexSelected = 0;
+                }
+            }
+
+            if(upStateNew &&  !upStateOld) {
+                indexSelected = indexSelected - 1;
+                if(indexSelected < 0) {
+                    indexSelected = _autoPlans.size() - 1;
+                }
+            }
+
+            upStateOld = upStateNew;
+            downStateOld = downStateNew;
+
+            sleep(10);
         }
 
+        String autoPlanName = _autoPlanNames.get(indexSelected);
+
+        telemetry.addLine(String.format("Plan Selected: %s", autoPlanName));
+        telemetry.update();
+
         _driveTrain.resetPositions();
+
+        AutonomousPlan autoPlan = _autoPlans.get(autoPlanName);
 
         // Wait for the game to start (driver presses PLAY)
 
         waitForStart();
 
-        // Run auto plan
+        autoPlan.runPlan(this);
 
-        String currentState = _startState;
-
-        if(currentState == null) {
-            currentState = _firstState;
-        }
-
-        while(opModeIsActive() && currentState != null) {
-            RobotLog.dd(CLASS_NAME, "runOpMode()::currentState: %s", currentState);
-
-            telemetry.addData("State", currentState);
-            telemetry.update();
-
-            AutoStateIF autoState = _autoStates.get(currentState);
-
-            if(autoState == null) {
-                telemetry.addData("Error", "Undefined state: " + currentState);
-                telemetry.update();
-                break;
-            }
-            else {
-                Map<String, Object> effPropertyValues = new HashMap<>();
-                synchronized(this) {
-                    currentState = autoState.doState(this, effPropertyValues);
-                }
-            }
-        }
-
-        RobotLog.dd(CLASS_NAME, "runOpMode()::done");
+        terminateComponents();
     }
 }

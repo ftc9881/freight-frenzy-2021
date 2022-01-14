@@ -40,6 +40,17 @@
       "minTurnSpeed": 0.35,
       "transitions": {
         "end": {
+          "newState": "turnLittle2"
+        }
+      }
+    },
+    "turnLittle2": {
+      "type": "TURN",
+      "angle": 5,
+      "maxTurnSpeed": 0.6,
+      "minTurnSpeed": 0.35,
+      "transitions": {
+        "end": {
           "newState": "littleMove3"
         }
       }
@@ -92,7 +103,7 @@
     },
     "littleMove2": {
       "type": "MOVE",
-      "distance": 0.45,
+      "distance": 0.5,
       "movement": {
         "moveSpeed": 0.75
       },

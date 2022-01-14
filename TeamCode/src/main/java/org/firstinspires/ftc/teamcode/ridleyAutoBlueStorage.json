@@ -23,7 +23,7 @@
   "states": {
     "moveOut": {
       "type": "MOVE",
-      "distance": 1.25,
+      "distance": 0.4,
       "movement": {
         "moveSpeed": 0.75
       },
@@ -35,30 +35,7 @@
     },
     "turnLittle": {
       "type": "TURN",
-      "angle": 10,
-      "maxTurnSpeed": 0.6,
-      "minTurnSpeed": 0.35,
-      "transitions": {
-        "end": {
-          "newState": "littleMove3"
-        }
-      }
-    },
-    "littleMove3": {
-      "type": "MOVE",
-      "distance": 0.15,
-      "movement": {
-        "moveSpeed": 0.75
-      },
-      "transitions": {
-        "end": {
-          "newState": "turnRight"
-        }
-      }
-    },
-    "turnRight": {
-      "type": "TURN",
-      "angle": 76,
+      "angle": -5,
       "maxTurnSpeed": 0.6,
       "minTurnSpeed": 0.35,
       "transitions": {
@@ -69,19 +46,19 @@
     },
     "littleMove": {
       "type": "MOVE",
-      "distance": 0.75,
+      "distance": 0.3,
       "movement": {
         "moveSpeed": 0.75
       },
       "transitions": {
         "end": {
-          "newState": "turnLeft"
+          "newState": "turnTiny"
         }
       }
     },
-    "turnLeft": {
+    "turnTiny": {
       "type": "TURN",
-      "angle": -90,
+      "angle": -85,
       "maxTurnSpeed": 0.6,
       "minTurnSpeed": 0.35,
       "transitions": {
@@ -92,21 +69,10 @@
     },
     "littleMove2": {
       "type": "MOVE",
-      "distance": 0.45,
+      "distance": 0.65,
       "movement": {
         "moveSpeed": 0.75
       },
-      "transitions": {
-        "end": {
-          "newState": "turnRight2"
-        }
-      }
-    },
-    "turnRight2": {
-      "type": "TURN",
-      "angle": 60,
-      "maxTurnSpeed": 0.6,
-      "minTurnSpeed": 0.35,
       "transitions": {
         "end": {
           "newState": "done"

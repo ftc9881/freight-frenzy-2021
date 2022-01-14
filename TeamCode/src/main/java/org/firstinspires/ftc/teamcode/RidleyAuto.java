@@ -51,10 +51,4 @@ public class RidleyAuto extends RobotAuto {
     String getRobotConfigFilename() {
         return "ridleyConfig.json";
     }
-
-    @Override
-    String getAutoPlanFilename() {
-        return "ridleyAuto.json";
-    }
-
 }

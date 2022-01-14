@@ -6,12 +6,16 @@
       "left": {
         "name": "left_drive",
         "direction": "FORWARD",
-        "clicksPerMeter": 1500
+        "clicksPerMeter": 1500,
+        "speedExponent": 2,
+        "speedScale": "1"
       },
       "right": {
         "name": "right_drive",
         "direction": "REVERSE",
-        "clicksPerMeter": 1500
+        "clicksPerMeter": 1500,
+        "speedExponent": 2,
+        "speedScale": "1"
       }
     }
   },
@@ -19,28 +23,32 @@
     "liftMotor": {
       "type": "MOTOR",
       "name": "lift_motor",
+      "mode": "RUN_WITHOUT_ENCODER",
+      "velocity": false,
       "direction": "FORWARD",
       "telemetry": true
     },
     "rightIntakeMotor": {
       "type": "MOTOR",
-      "name": "lift_motor",
+      "name": "right_intake",
       "direction": "FORWARD",
+      "mode": "RUN_WITHOUT_ENCODER",
       "velocity": false,
       "maxVelocity": 36000,
       "telemetry": true,
-      "speedExponent": 2,
-      "speedScale": ".75"
+      "speedExponent": 1,
+      "speedScale": "1"
     },
     "leftIntakeMotor": {
       "type": "MOTOR",
-      "name": "lift_motor",
+      "name": "left_intake",
       "direction": "REVERSE",
+      "mode": "RUN_WITHOUT_ENCODER",
       "velocity": false,
       "maxVelocity": 36000,
       "telemetry": true,
-      "speedExponent": 2,
-      "speedScale": ".75"
+      "speedExponent": 1,
+      "speedScale": "1"
     },
     "basketServo": {
       "type": "SERVO",
@@ -58,7 +66,7 @@
       "xAxis": "Z",
       "yAxis": "Y",
       "zAxis": "X",
-      "reverse": false
+      "reverse": true
     }
   },
   "controllerOne": {
@@ -82,17 +90,17 @@
         "actions": [
           {
             "activity": "PRESS",
-            "type": "PROPERTY",
+            "type": "PARAMETER",
             "deviceName": "[drive_train]",
-            "property": "mode",
-            "value": "micro"
+            "parameter": "SPEED_SCALE",
+            "value": ".2"
           },
           {
             "activity": "RELEASE",
-            "type": "PROPERTY",
+            "type": "PARAMETER",
             "deviceName": "[drive_train]",
-            "property": "mode",
-            "value": "macro"
+            "parameter": "SPEED_SCALE",
+            "value": "1"
           }
         ]
       },
@@ -154,13 +162,27 @@
             "activity": "CHANGE",
             "type": "BEHAVIOR",
             "deviceName": "leftIntakeMotor",
-            "behavior": "FORWARD"
+            "behavior": "REVERSE"
           },
           {
             "activity": "CHANGE",
             "type": "BEHAVIOR",
             "deviceName": "rightIntakeMotor",
-            "behavior": "FORWARD"
+            "behavior": "REVERSE"
+          },
+          {
+            "activity": "CHANGE",
+            "type": "PARAMETER",
+            "deviceName": "leftIntakeMotor",
+            "parameter": "SPEED_SCALE",
+            "value": ".4"
+          },
+          {
+            "activity": "CHANGE",
+            "type": "PARAMETER",
+            "deviceName": "rightIntakeMotor",
+            "parameter": "SPEED_SCALE",
+            "value": ".4"
           }
         ]
       },
@@ -171,16 +193,44 @@
             "activity": "CHANGE",
             "type": "BEHAVIOR",
             "deviceName": "leftIntakeMotor",
-            "behavior": "REVERSE"
+            "behavior": "FORWARD"
           },
           {
             "activity": "CHANGE",
             "type": "BEHAVIOR",
             "deviceName": "rightIntakeMotor",
-            "behavior": "REVERSE"
+            "behavior": "FORWARD"
+          },
+          {
+            "activity": "CHANGE",
+            "type": "PARAMETER",
+            "deviceName": "leftIntakeMotor",
+            "parameter": "SPEED_SCALE",
+            "value": "1"
+          },
+          {
+            "activity": "CHANGE",
+            "type": "PARAMETER",
+            "deviceName": "rightIntakeMotor",
+            "parameter": "SPEED_SCALE",
+            "value": "1"
           }
         ]
       }
+    }
+  },
+  "autonomousModes": {
+    "warehouseBlue": {
+      "name": "Warehouse Blue",
+      "fileName": "ridleyAutoBlue.json"
+    },
+    "storageBlue": {
+      "name": "Storage Blue",
+      "fileName": "ridleyAutoBlueStorage.json"
+    },
+    "warehouseRed": {
+      "name": "Warehouse Red",
+      "fileName": "ridleyAutoRed.json"
     }
   }
 }

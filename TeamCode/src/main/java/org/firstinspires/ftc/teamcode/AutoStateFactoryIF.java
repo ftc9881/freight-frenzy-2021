@@ -12,7 +12,8 @@ public interface AutoStateFactoryIF {
         CUSTOM;
     }
 
-    AutoStateIF autoStateInstance(AutoStateType autoStateType, OpMode opMode,
+    AutoStateIF autoStateInstance(AutoStateType autoStateType,
+                                  OpMode opMode,
                                   SteeringIF moveSteering,
                                   SteeringIF turnSteering
     );

@@ -7,6 +7,4 @@ import java.util.Map;
 
 public interface SensorIF extends ComponentIF {
     void configure(JSONObject jsonObject, Map<String, DeviceIF> devices) throws JSONException, ConfigurationException;
-
-    void update();
 }

@@ -7,7 +7,7 @@ import org.json.JSONObject;
 import java.util.Map;
 
 public interface ControllerIF extends ComponentIF {
-    void update(Gamepad gamepad);
+    void updateGamepad(Gamepad gamepad);
 
     void updateMovement();
 

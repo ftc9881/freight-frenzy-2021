@@ -194,5 +194,44 @@ public abstract class RobotBase extends LinearOpMode {
             telemetry.addData("ConfigurationException",  e.getMessage());
             telemetry.update();
         }
+
+        initComponents();
     }
+
+    public void initComponents() {
+        _driveTrain.init();
+
+        for(ComponentIF component : _devices.values()) {
+            component.init();
+        }
+
+        for(ComponentIF component : _sensors.values()) {
+            component.init();
+        }
+    }
+
+    public void updateComponents() {
+        _driveTrain.update();
+
+        for(ComponentIF component : _devices.values()) {
+            component.update();
+        }
+
+        for(ComponentIF component : _sensors.values()) {
+            component.update();
+        }
+    }
+
+    public void terminateComponents() {
+        _driveTrain.terminate();
+
+        for(ComponentIF component : _devices.values()) {
+            component.terminate();
+        }
+
+        for(ComponentIF component : _sensors.values()) {
+            component.terminate();
+        }
+    }
+
 }

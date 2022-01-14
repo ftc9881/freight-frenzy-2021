@@ -5,7 +5,7 @@ import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 public interface ActionFactoryIF {
     enum ActionType {
         BEHAVIOR,
-        PROPERTY
+        PARAMETER
     }
 
     ActionIF actionInstance(ActionType actionType) throws ConfigurationException;

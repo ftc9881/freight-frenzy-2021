@@ -7,13 +7,15 @@ import org.json.JSONObject;
 
 import java.util.Map;
 
-public class PropertyAction implements ActionIF {
+public class ParameterAction implements ActionIF {
     private DeviceIF _device = null;
+    private String _parameter = null;
+    private String _value = null;
 
-    public PropertyAction() {
+    public ParameterAction() {
     }
 
-    public PropertyAction(DeviceIF device) {
+    public ParameterAction(DeviceIF device) {
         _device = device;
     }
 
@@ -27,13 +29,28 @@ public class PropertyAction implements ActionIF {
             if(_device == null) {
                 throw new ConfigurationException("Invalid device name: " + deviceName);
             }
+
         } catch (JSONException e) {
             throw new ConfigurationException("Missing device", e);
+        }
+
+        try {
+            _parameter = jsonObject.getString("parameter");
+        } catch (JSONException e) {
+            throw new ConfigurationException("Missing parameter", e);
+        }
+
+
+        try {
+            _value = jsonObject.getString("value");
+        } catch (JSONException e) {
+            throw new ConfigurationException("Missing value", e);
         }
     }
 
     @Override
     public void process(Map<String, Object> properties) {
         RobotLog.dd(this.getClass().getSimpleName(), "Process action");
+        _device.setParameter(_parameter, _value);
     }
 }

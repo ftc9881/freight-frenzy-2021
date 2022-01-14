@@ -102,6 +102,8 @@ public abstract class AutoState implements AutoStateIF {
             active = doAction();
 
             RobotLog.dd(CLASS_NAME, "doState()::active: %s", active);
+
+            robotBase.updateComponents();
         }
 
         end();

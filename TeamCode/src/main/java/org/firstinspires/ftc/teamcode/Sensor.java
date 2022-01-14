@@ -20,9 +20,13 @@ public class Sensor extends Component implements SensorIF {
 
     }
 
-    @Override
-    public void update() {
+    public void init() {
+    }
 
+    public void update() {
+    }
+
+    public void terminate() {
     }
 
 }

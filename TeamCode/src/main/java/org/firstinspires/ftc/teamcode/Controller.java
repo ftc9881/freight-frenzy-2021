@@ -132,7 +132,7 @@ public abstract class Controller extends Component implements ControllerIF {
     }
 
     @Override
-    public void update(Gamepad gamepad) {
+    public void updateGamepad(Gamepad gamepad) {
         _leftX.updateValue(gamepad.left_stick_x);
         _leftY.updateValue(gamepad.left_stick_y);
         _rightX.updateValue(gamepad.right_stick_x);
@@ -218,4 +218,12 @@ public abstract class Controller extends Component implements ControllerIF {
         _leftButton.getPropertyValues(values);
     }
 
+    public void init() {
+    }
+
+    public void update() {
+    }
+
+    public void terminate() {
+    }
 }

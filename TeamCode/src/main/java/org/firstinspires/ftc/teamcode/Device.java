@@ -4,7 +4,7 @@ import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 
 import java.util.Map;
 
-public class Device extends Component implements DeviceIF {
+public abstract class Device extends Component implements DeviceIF {
     public Device(OpMode opMode, String name) {
         super(opMode, name);
     }
@@ -16,5 +16,13 @@ public class Device extends Component implements DeviceIF {
 
     @Override
     public void behave(ActionIF action, String behavior, Map<String, Object> properties) {
+    }
+
+    public boolean isValidParameter(String parameter) {
+        return false;
+    }
+
+    @Override
+    public void setParameter(String parameterName, String value) {
     }
 }

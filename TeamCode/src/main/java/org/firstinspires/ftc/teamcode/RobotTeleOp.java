@@ -85,8 +85,6 @@ public abstract class RobotTeleOp extends RobotBase {
     public void runOpMode() throws InterruptedException {
         super.runOpMode();
 
-        _driveTrain.resetPositions();
-
         // Wait for the game to start (driver presses PLAY)
 
         waitForStart();
@@ -101,14 +99,14 @@ public abstract class RobotTeleOp extends RobotBase {
             Movement movementTwo = null;
 
             if(_controllerOne != null) {
-                _controllerOne.update(gamepad1);
+                _controllerOne.updateGamepad(gamepad1);
                 _controllerOne.addTelemetryData(telemetry);
                 _controllerOne.updateMovement();
                 movementOne = _controllerOne.getMovement();
             }
 
             if(_controllerTwo != null) {
-                _controllerTwo.update(gamepad2);
+                _controllerTwo.updateGamepad(gamepad2);
                 _controllerTwo.addTelemetryData(telemetry);
                 _controllerTwo.updateMovement();
                 movementTwo = _controllerTwo.getMovement();
@@ -117,6 +115,8 @@ public abstract class RobotTeleOp extends RobotBase {
             Movement movementBoth = Movement.combine(movementOne, movementTwo);
 
             _driveTrain.updateMovement(movementBoth);
+
+            updateComponents();
 
             telemetry.clearAll();
 
@@ -129,5 +129,7 @@ public abstract class RobotTeleOp extends RobotBase {
 
             telemetry.update();
         }
+
+        terminateComponents();
     }
 }

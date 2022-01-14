@@ -35,7 +35,7 @@
     },
     "turnLittle": {
       "type": "TURN",
-      "angle": 10,
+      "angle": -10,
       "maxTurnSpeed": 0.6,
       "minTurnSpeed": 0.35,
       "transitions": {
@@ -44,6 +44,18 @@
         }
       }
     },
+    "turnLittle2": {
+      "type": "TURN",
+      "angle": -5,
+      "maxTurnSpeed": 0.6,
+      "minTurnSpeed": 0.35,
+      "transitions": {
+        "end": {
+          "newState": "littleMove3"
+        }
+      }
+    },
+
     "littleMove3": {
       "type": "MOVE",
       "distance": 0.15,
@@ -58,7 +70,7 @@
     },
     "turnRight": {
       "type": "TURN",
-      "angle": 76,
+      "angle": -76,
       "maxTurnSpeed": 0.6,
       "minTurnSpeed": 0.35,
       "transitions": {
@@ -81,7 +93,7 @@
     },
     "turnLeft": {
       "type": "TURN",
-      "angle": -90,
+      "angle": 90,
       "maxTurnSpeed": 0.6,
       "minTurnSpeed": 0.35,
       "transitions": {
@@ -104,7 +116,7 @@
     },
     "turnRight2": {
       "type": "TURN",
-      "angle": 60,
+      "angle": -60,
       "maxTurnSpeed": 0.6,
       "minTurnSpeed": 0.35,
       "transitions": {

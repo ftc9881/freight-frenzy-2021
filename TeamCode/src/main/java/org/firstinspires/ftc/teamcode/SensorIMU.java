@@ -90,6 +90,9 @@ public class SensorIMU extends Sensor implements SensorIMU_IF {
         }
     }
 
+    public void init() {
+    }
+
     public void update() {
         super.update();
 
@@ -148,6 +151,9 @@ public class SensorIMU extends Sensor implements SensorIMU_IF {
         }
 
         _lastAngles = _angles;
+    }
+
+    public void terminate() {
     }
 
     double getRoll() {
