@@ -23,7 +23,7 @@
   "states": {
     "moveOut": {
       "type": "MOVE",
-      "distance": 1.25,
+      "distance": 1.3,
       "movement": {
         "moveSpeed": 0.75
       },
@@ -35,7 +35,7 @@
     },
     "turnLittle": {
       "type": "TURN",
-      "angle": -10,
+      "angle": -12,
       "maxTurnSpeed": 0.6,
       "minTurnSpeed": 0.35,
       "transitions": {
@@ -116,7 +116,7 @@
     },
     "turnRight2": {
       "type": "TURN",
-      "angle": -60,
+      "angle": -57,
       "maxTurnSpeed": 0.6,
       "minTurnSpeed": 0.35,
       "transitions": {

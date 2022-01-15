@@ -26,6 +26,8 @@
       "mode": "RUN_WITHOUT_ENCODER",
       "velocity": false,
       "direction": "FORWARD",
+      "minPosition": 0,
+      "maxPosition": 2200,
       "telemetry": true
     },
     "rightIntakeMotor": {
@@ -175,14 +177,14 @@
             "type": "PARAMETER",
             "deviceName": "leftIntakeMotor",
             "parameter": "SPEED_SCALE",
-            "value": ".4"
+            "value": ".5"
           },
           {
             "activity": "CHANGE",
             "type": "PARAMETER",
             "deviceName": "rightIntakeMotor",
             "parameter": "SPEED_SCALE",
-            "value": ".4"
+            "value": ".5"
           }
         ]
       },

@@ -199,6 +199,15 @@ public class BotMotor extends Component {
     }
 
     public void update() {
+        if(getCurrentPosition() < _minPosition) {
+            setSpeed(Math.max(getSpeed(), 0));
+//            _dcMotor.setTargetPosition(_minPosition);
+        }
+
+        if(getCurrentPosition() > _maxPosition) {
+            setSpeed(Math.min(getSpeed(), 0));
+//            _dcMotor.setTargetPosition(_maxPosition);
+        }
     }
 
     public void terminate() {

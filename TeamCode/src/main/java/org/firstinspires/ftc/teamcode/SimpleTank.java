@@ -58,8 +58,10 @@ public class SimpleTank extends LinearOpMode {
     private DcMotor leftDrive = null;
     private DcMotor rightDrive = null;
 
-    private DcMotor intakeMotor = null;
-    private DcMotor outtakeMotor = null;
+    private DcMotor liftMotor = null;
+
+    private DcMotor rightIntakeMotor = null;
+    private DcMotor leftIntakeMotor = null;
 
     private Servo simpleServo = null;
 
@@ -74,10 +76,12 @@ public class SimpleTank extends LinearOpMode {
         leftDrive = hardwareMap.get(DcMotor.class, "left_drive");
         rightDrive = hardwareMap.get(DcMotor.class, "right_drive");
 
-        intakeMotor = hardwareMap.get(DcMotor.class, "intake_motor");
-        outtakeMotor = hardwareMap.get(DcMotor.class, "outtake_motor");
+        liftMotor = hardwareMap.get(DcMotor.class, "lift_motor");
 
-        simpleServo = hardwareMap.get(Servo.class, "simple_servo");
+        rightIntakeMotor = hardwareMap.get(DcMotor.class, "right_intake");
+        leftIntakeMotor = hardwareMap.get(DcMotor.class, "left_intake");
+
+        simpleServo = hardwareMap.get(Servo.class, "basket_servo");
 
         // Most robots need the motor on one side to be reversed to drive forward
         // Reverse the motor that runs backwards when connected directly to the battery
@@ -90,8 +94,10 @@ public class SimpleTank extends LinearOpMode {
         leftDrive.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
         rightDrive.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
 
-        intakeMotor.setDirection(DcMotor.Direction.REVERSE);
-        outtakeMotor.setDirection(DcMotor.Direction.REVERSE);
+        liftMotor.setDirection(DcMotor.Direction.REVERSE);
+
+        rightIntakeMotor.setDirection(DcMotor.Direction.REVERSE);
+        leftIntakeMotor.setDirection(DcMotor.Direction.REVERSE);
 
         // Wait for the game to start (driver presses PLAY)
         waitForStart();
@@ -115,20 +121,23 @@ public class SimpleTank extends LinearOpMode {
             boolean bButton = gamepad1.b;
 
             if(rightButton) {
-                intakeMotor.setPower(1);
+                liftMotor.setPower(1);
             }
             else if(leftButton) {
-                intakeMotor.setPower(-1);
+                liftMotor.setPower(-1);
             } else {
-                intakeMotor.setPower(0);
+                liftMotor.setPower(0);
             }
 
             if(rightTrigger > 0) {
-                outtakeMotor.setPower(-rightTrigger);
+                leftIntakeMotor.setPower(-rightTrigger);
+                rightIntakeMotor.setPower(-rightTrigger);
             } else if(leftTrigger > 0) {
-                outtakeMotor.setPower(leftTrigger);
+                leftIntakeMotor.setPower(leftTrigger);
+                rightIntakeMotor.setPower(leftTrigger);
             } else {
-                outtakeMotor.setPower(0);
+                leftIntakeMotor.setPower(0);
+                rightIntakeMotor.setPower(0);
             }
 
             if(aButton) {

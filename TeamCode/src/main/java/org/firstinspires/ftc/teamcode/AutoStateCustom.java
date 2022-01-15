@@ -54,6 +54,14 @@ public class AutoStateCustom implements AutoStateIF {
         _autoState.configure(jsonObject, driveTrain, devices, sensors);
     }
 
+    public void init(RobotBase robotBase) {
+
+    }
+
+    public void terminate(RobotBase robotBase) {
+
+    }
+
     public String doState(RobotBase robotBase, Map<String, Object> propertyValues) throws InterruptedException {
         return _autoState.doState(robotBase, propertyValues);
     }
