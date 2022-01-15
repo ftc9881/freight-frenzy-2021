@@ -14,6 +14,8 @@ public class AutoStateFactory implements AutoStateFactoryIF {
                 return new AutoStateTurn(opMode, turnSteering);
             case MOTOR:
                 return new AutoStateMotor(opMode);
+            case VUFORIA_OBJECT:
+                return new AutoStateVuforiaObject(opMode);
             case PAUSE:
                 return new AutoStatePause(opMode);
             case TERMINATE:

@@ -7,6 +7,7 @@ public interface AutoStateFactoryIF {
         MOVE,
         TURN,
         MOTOR,
+        VUFORIA_OBJECT,
         PAUSE,
         TERMINATE,
         CUSTOM;
