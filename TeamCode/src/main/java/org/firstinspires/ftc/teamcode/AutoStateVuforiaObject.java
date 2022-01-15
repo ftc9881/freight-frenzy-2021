@@ -69,6 +69,8 @@ public class AutoStateVuforiaObject extends AutoState implements AutoStateIF {
     }
 
     public void init(RobotBase robotBase) {
+        super.init(robotBase);
+
         // The TFObjectDetector uses the camera frames from the VuforiaLocalizer, so we create that
         // first.
         initVuforia(robotBase);

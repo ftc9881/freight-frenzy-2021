@@ -1,6 +1,5 @@
 package org.firstinspires.ftc.teamcode;
 
-import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import com.qualcomm.robotcore.util.RobotLog;
 
@@ -70,6 +69,12 @@ public abstract class AutoState implements AutoStateIF {
         }
     }
 
+    public void init(RobotBase robotBase) {
+    }
+
+    public void terminate(RobotBase robotBase) {
+    }
+
     String evaluateTransitions(Map<String, Object> propertyValues) {
         for(String transitionName : _transitions.keySet()) {
             RobotLog.dd(CLASS_NAME, "evaluateTransitions()::transitionName: %s", transitionName);
@@ -90,7 +95,7 @@ public abstract class AutoState implements AutoStateIF {
 
     @Override
     public String doState(RobotBase robotBase, Map<String, Object> propertyValues) throws InterruptedException {
-        init();
+        begin();
 
         boolean active = true;
 
@@ -118,7 +123,7 @@ public abstract class AutoState implements AutoStateIF {
         return(newState);
     }
 
-    public void init() {
+    public void begin() {
         _initTime = System.currentTimeMillis();
     }
 
@@ -129,6 +134,5 @@ public abstract class AutoState implements AutoStateIF {
     }
 
     public void end() {
-
     }
 }

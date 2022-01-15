@@ -16,5 +16,9 @@ public interface AutoStateIF {
                    Map<String, SensorIF> sensors)
             throws ConfigurationException;
 
+    void init(RobotBase robotBase);
+
     String doState(RobotBase robotBase, Map<String, Object> propertyValues) throws InterruptedException;
+
+    void terminate(RobotBase robotBase);
 }

@@ -160,7 +160,21 @@ public class AutonomousPlan {
         }
     }
 
+    void init(RobotBase robotBase) {
+        for(AutoStateIF autoState : _autoStates.values()) {
+            autoState.init(robotBase);
+        }
+    }
+
+    void terminate(RobotBase robotBase) {
+        for(AutoStateIF autoState : _autoStates.values()) {
+            autoState.terminate(robotBase);
+        }
+    }
+
     public void runPlan(RobotBase robotBase) throws InterruptedException {
+        init(robotBase);
+
         // Run auto plan
 
         String currentState = _startState;
@@ -189,6 +203,8 @@ public class AutonomousPlan {
                 }
             }
         }
+
+        terminate(robotBase);
 
         RobotLog.dd(CLASS_NAME, "runPlan()::done");
     }

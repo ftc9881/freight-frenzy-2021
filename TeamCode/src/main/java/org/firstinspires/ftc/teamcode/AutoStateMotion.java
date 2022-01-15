@@ -53,8 +53,8 @@ public class AutoStateMotion extends AutoState {
     }
 
 
-    public void init() {
-        super.init();
+    public void begin() {
+        super.begin();
 
         RobotLog.dd(CLASS_NAME, "init()");
 
