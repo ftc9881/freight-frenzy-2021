@@ -15,8 +15,8 @@ public class AutoStatePause extends AutoState implements AutoStateIF {
         super(opMode);
     }
 
-    public boolean doAction() throws InterruptedException {
-        boolean active = super.doAction();
+    public boolean doAction(RobotBase robotBase) throws InterruptedException {
+        boolean active = super.doAction(robotBase);
 
         return active;
     }

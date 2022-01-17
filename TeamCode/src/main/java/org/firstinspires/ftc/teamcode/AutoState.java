@@ -95,7 +95,7 @@ public abstract class AutoState implements AutoStateIF {
 
     @Override
     public String doState(RobotBase robotBase, Map<String, Object> propertyValues) throws InterruptedException {
-        begin();
+        begin(robotBase);
 
         boolean active = true;
 
@@ -104,14 +104,14 @@ public abstract class AutoState implements AutoStateIF {
 
             RobotLog.dd(CLASS_NAME, "doState()::doAction()::Pre");
 
-            active = doAction();
+            active = doAction(robotBase);
 
             RobotLog.dd(CLASS_NAME, "doState()::active: %s", active);
 
             robotBase.updateComponents();
         }
 
-        end();
+        end(robotBase);
 
         Map<String, Object> effPropertyValues = new HashMap<>(propertyValues);
         robotBase.updatePropertyValues(effPropertyValues);
@@ -123,16 +123,16 @@ public abstract class AutoState implements AutoStateIF {
         return(newState);
     }
 
-    public void begin() {
+    public void begin(RobotBase robotBase) {
         _initTime = System.currentTimeMillis();
     }
 
-    protected boolean doAction() throws InterruptedException {
+    protected boolean doAction(RobotBase robotBase) throws InterruptedException {
         long elapsedTime = System.currentTimeMillis() - _initTime;
 
         return elapsedTime < _maxMilliseconds;
     }
 
-    public void end() {
+    public void end(RobotBase robotBase) {
     }
 }

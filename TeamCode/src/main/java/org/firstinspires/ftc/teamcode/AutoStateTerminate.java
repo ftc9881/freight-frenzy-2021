@@ -8,7 +8,7 @@ public class AutoStateTerminate extends AutoState implements AutoStateIF {
     }
 
     @Override
-    protected boolean doAction() {
+    protected boolean doAction(RobotBase robotBase) {
         return false;
     }
 }

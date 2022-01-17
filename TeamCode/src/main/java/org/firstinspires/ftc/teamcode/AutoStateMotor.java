@@ -49,16 +49,16 @@ public class AutoStateMotor extends AutoState implements AutoStateIF {
         }
     }
 
-    public void begin() {
-        super.begin();
+    public void begin(RobotBase robotBase) {
+        super.begin(robotBase);
 
         RobotLog.dd(CLASS_NAME, "init()");
 
         _deviceMotor.init();
     }
 
-    public boolean doAction() throws InterruptedException {
-        boolean active = super.doAction();
+    public boolean doAction(RobotBase robotBase) throws InterruptedException {
+        boolean active = super.doAction(robotBase);
 
         if(active) {
             RobotLog.dd(CLASS_NAME, "doAction()");
@@ -73,8 +73,8 @@ public class AutoStateMotor extends AutoState implements AutoStateIF {
         return active;
     }
 
-    public void end() {
-        super.end();
+    public void end(RobotBase robotBase) {
+        super.end(robotBase);
 
         _deviceMotor.stop();
     }

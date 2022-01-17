@@ -124,9 +124,13 @@ public abstract class RobotAuto extends RobotBase {
 
         // Wait for the game to start (driver presses PLAY)
 
+        autoPlan.init(this);
+
         waitForStart();
 
         autoPlan.runPlan(this);
+
+        autoPlan.terminate(this);
 
         terminateComponents();
     }

@@ -161,19 +161,23 @@ public class AutonomousPlan {
     }
 
     void init(RobotBase robotBase) {
+        RobotLog.dd(CLASS_NAME, "init()");
+
         for(AutoStateIF autoState : _autoStates.values()) {
             autoState.init(robotBase);
         }
     }
 
     void terminate(RobotBase robotBase) {
+        RobotLog.dd(CLASS_NAME, "terminate()");
+
         for(AutoStateIF autoState : _autoStates.values()) {
             autoState.terminate(robotBase);
         }
     }
 
     public void runPlan(RobotBase robotBase) throws InterruptedException {
-        init(robotBase);
+        RobotLog.dd(CLASS_NAME, "runPlan()::begin");
 
         // Run auto plan
 
@@ -203,8 +207,6 @@ public class AutonomousPlan {
                 }
             }
         }
-
-        terminate(robotBase);
 
         RobotLog.dd(CLASS_NAME, "runPlan()::done");
     }

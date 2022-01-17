@@ -53,8 +53,8 @@ public class AutoStateMotion extends AutoState {
     }
 
 
-    public void begin() {
-        super.begin();
+    public void begin(RobotBase robotBase) {
+        super.begin(robotBase);
 
         RobotLog.dd(CLASS_NAME, "init()");
 
@@ -66,8 +66,8 @@ public class AutoStateMotion extends AutoState {
     }
 
 
-    public void end() {
-        super.end();
+    public void end(RobotBase robotBase) {
+        super.end(robotBase);
 
         _driveTrain.stop();
     }
