@@ -26,7 +26,7 @@
       "mode": "RUN_WITHOUT_ENCODER",
       "velocity": false,
       "direction": "FORWARD",
-      "minPosition": 0,
+      "minPosition": -100,
       "maxPosition": 2200,
       "telemetry": true
     },
@@ -34,9 +34,9 @@
       "type": "MOTOR",
       "name": "right_intake",
       "direction": "FORWARD",
-      "mode": "RUN_WITHOUT_ENCODER",
-      "velocity": false,
-      "maxVelocity": 36000,
+      "mode": "RUN_USING_ENCODER",
+      "velocity": true,
+      "maxVelocity": 10000,
       "telemetry": true,
       "speedExponent": 1,
       "speedScale": "1"
@@ -45,9 +45,9 @@
       "type": "MOTOR",
       "name": "left_intake",
       "direction": "REVERSE",
-      "mode": "RUN_WITHOUT_ENCODER",
-      "velocity": false,
-      "maxVelocity": 36000,
+      "mode": "RUN_USING_ENCODER",
+      "velocity": true,
+      "maxVelocity": 10000,
       "telemetry": true,
       "speedExponent": 1,
       "speedScale": "1"
@@ -73,7 +73,9 @@
   },
   "controllerOne": {
     "type": "TANK_STEER",
-    "telemetry": true,
+    "telemetry": false,
+    "turnScale": 0.65,
+    "turnExponent": 1,
     "controls": {
       "LEFT_X": {
         "telemetry": false
@@ -177,14 +179,164 @@
             "type": "PARAMETER",
             "deviceName": "leftIntakeMotor",
             "parameter": "SPEED_SCALE",
-            "value": ".5"
+            "value": ".25"
           },
           {
             "activity": "CHANGE",
             "type": "PARAMETER",
             "deviceName": "rightIntakeMotor",
             "parameter": "SPEED_SCALE",
-            "value": ".5"
+            "value": ".25"
+          }
+        ]
+      },
+      "RIGHT_TRIGGER": {
+        "telemetry": true,
+        "actions": [
+          {
+            "activity": "CHANGE",
+            "type": "BEHAVIOR",
+            "deviceName": "leftIntakeMotor",
+            "behavior": "FORWARD"
+          },
+          {
+            "activity": "CHANGE",
+            "type": "BEHAVIOR",
+            "deviceName": "rightIntakeMotor",
+            "behavior": "FORWARD"
+          },
+          {
+            "activity": "CHANGE",
+            "type": "PARAMETER",
+            "deviceName": "leftIntakeMotor",
+            "parameter": "SPEED_SCALE",
+            "value": "1"
+          },
+          {
+            "activity": "CHANGE",
+            "type": "PARAMETER",
+            "deviceName": "rightIntakeMotor",
+            "parameter": "SPEED_SCALE",
+            "value": "1"
+          }
+        ]
+      }
+    }
+  },
+  "controllerTwo": {
+    "type": "SHOOTER",
+    "telemetry": false,
+    "controls": {
+      "LEFT_X": {
+        "telemetry": false
+      },
+      "LEFT_Y": {
+        "telemetry": false
+      },
+      "RIGHT_X": {
+        "telemetry": false
+      },
+      "RIGHT_Y": {
+        "telemetry": false
+      },
+      "A": {
+        "telemetry": true,
+        "actions": [
+          {
+            "activity": "PRESS",
+            "type": "PARAMETER",
+            "deviceName": "[drive_train]",
+            "parameter": "SPEED_SCALE",
+            "value": ".2"
+          },
+          {
+            "activity": "RELEASE",
+            "type": "PARAMETER",
+            "deviceName": "[drive_train]",
+            "parameter": "SPEED_SCALE",
+            "value": "1"
+          }
+        ]
+      },
+      "B": {
+        "telemetry": true,
+        "actions": [
+          {
+            "activity": "PRESS",
+            "type": "BEHAVIOR",
+            "deviceName": "basketServo",
+            "behavior": "MAXIMUM"
+          },
+          {
+            "activity": "RELEASE",
+            "type": "BEHAVIOR",
+            "deviceName": "basketServo",
+            "behavior": "MINIMUM"
+          }
+        ]
+      },
+      "LEFT_BUTTON": {
+        "telemetry": true,
+        "actions": [
+          {
+            "activity": "PRESS",
+            "type": "BEHAVIOR",
+            "deviceName": "liftMotor",
+            "behavior": "REVERSE"
+          },
+          {
+            "activity": "RELEASE",
+            "type": "BEHAVIOR",
+            "deviceName": "liftMotor",
+            "behavior": "STOP"
+          }
+        ]
+      },
+      "RIGHT_BUTTON": {
+        "telemetry": true,
+        "actions": [
+          {
+            "activity": "PRESS",
+            "type": "BEHAVIOR",
+            "deviceName": "liftMotor",
+            "behavior": "FORWARD"
+          },
+          {
+            "activity": "RELEASE",
+            "type": "BEHAVIOR",
+            "deviceName": "liftMotor",
+            "behavior": "STOP"
+          }
+        ]
+      },
+      "LEFT_TRIGGER": {
+        "telemetry": true,
+        "actions": [
+          {
+            "activity": "CHANGE",
+            "type": "BEHAVIOR",
+            "deviceName": "leftIntakeMotor",
+            "behavior": "REVERSE"
+          },
+          {
+            "activity": "CHANGE",
+            "type": "BEHAVIOR",
+            "deviceName": "rightIntakeMotor",
+            "behavior": "REVERSE"
+          },
+          {
+            "activity": "CHANGE",
+            "type": "PARAMETER",
+            "deviceName": "leftIntakeMotor",
+            "parameter": "SPEED_SCALE",
+            "value": ".25"
+          },
+          {
+            "activity": "CHANGE",
+            "type": "PARAMETER",
+            "deviceName": "rightIntakeMotor",
+            "parameter": "SPEED_SCALE",
+            "value": ".25"
           }
         ]
       },
@@ -233,6 +385,14 @@
     "warehouseRed": {
       "name": "Warehouse Red",
       "fileName": "ridleyAutoRed.json"
+    },
+    "storageRed": {
+      "name": "Storage Red",
+      "fileName": "ridleyAutoRedStorage.json"
+    },
+    "storageBlueDeliver": {
+      "name": "Deliver Blue",
+      "fileName": "ridleyAutoBlueDeliver.json"
     }
   }
 }

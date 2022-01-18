@@ -1,0 +1,86 @@
+{
+  "defaults": {
+    "moveSteering": {
+      "type": "IMU",
+      "imuSensor": "imu_control",
+      "pid": {
+        "kP": 0.01,
+        "kI": 0,
+        "kD": 0
+      }
+    },
+    "turnSteering": {
+      "type": "IMU",
+      "imuSensor": "imu_control",
+      "pid": {
+        "kP": 0.02,
+        "kI": 0.05,
+        "kD": 0
+      }
+    }
+  },
+  "startState": "moveOut",
+  "states": {
+    "moveOut": {
+      "type": "MOVE",
+      "distance": 0.4,
+      "movement": {
+        "moveSpeed": 0.75
+      },
+      "transitions": {
+        "end": {
+          "newState": "turnLittle"
+        }
+      }
+    },
+    "turnLittle": {
+      "type": "TURN",
+      "angle": 5,
+      "maxTurnSpeed": 0.6,
+      "minTurnSpeed": 0.35,
+      "transitions": {
+        "end": {
+          "newState": "littleMove"
+        }
+      }
+    },
+    "littleMove": {
+      "type": "MOVE",
+      "distance": 0.3,
+      "movement": {
+        "moveSpeed": 0.75
+      },
+      "transitions": {
+        "end": {
+          "newState": "turnTiny"
+        }
+      }
+    },
+    "turnTiny": {
+      "type": "TURN",
+      "angle": 85,
+      "maxTurnSpeed": 0.6,
+      "minTurnSpeed": 0.35,
+      "transitions": {
+        "end": {
+          "newState": "littleMove2"
+        }
+      }
+    },
+    "littleMove2": {
+      "type": "MOVE",
+      "distance": 0.65,
+      "movement": {
+        "moveSpeed": 0.75
+      },
+      "transitions": {
+        "end": {
+          "newState": "done"
+        }
+      }
+    },
+    "done": {
+      "type": "TERMINATE"
+    }
+  }
+}

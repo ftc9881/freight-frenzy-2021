@@ -56,8 +56,8 @@ public class AutoStateTurn extends AutoStateMotion {
     }
 
     @Override
-    public boolean doAction() throws InterruptedException  {
-        boolean active = super.doAction();
+    public boolean doAction(RobotBase robotBase) throws InterruptedException  {
+        boolean active = super.doAction(robotBase);
 
         if(active) {
             RobotLog.dd(CLASS_NAME, "doAction()");

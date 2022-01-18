@@ -22,8 +22,8 @@ public class ControllerTankSteer extends Controller implements ControllerIF {
     double _turnExponent = 2.5;
 
     @Override
-    public void configure(JSONObject jsonObject) throws ConfigurationException {
-        super.configure(jsonObject);
+    public void configure(JSONObject jsonObject, Map<String, DeviceIF> devices) throws ConfigurationException {
+        super.configure(jsonObject, devices);
 
         try {
             if( jsonObject.has("turnScale")) {

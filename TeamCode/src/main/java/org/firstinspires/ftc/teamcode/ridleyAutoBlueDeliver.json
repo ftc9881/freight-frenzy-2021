@@ -1,0 +1,71 @@
+{
+  "defaults": {
+    "moveSteering": {
+      "type": "IMU",
+      "imuSensor": "imu_control",
+      "pid": {
+        "kP": 0.01,
+        "kI": 0,
+        "kD": 0
+      }
+    },
+    "turnSteering": {
+      "type": "IMU",
+      "imuSensor": "imu_control",
+      "pid": {
+        "kP": 0.02,
+        "kI": 0.05,
+        "kD": 0
+      }
+    }
+  },
+  "startState": "findDuckCenter",
+  "states": {
+    "findDuckCenter": {
+      "type": "VUFORIA_OBJECT",
+      "objectRegions": {
+        "center" : {
+          "label": "Duck",
+          "left": 200,
+          "right": 400,
+          "state": "duckCenter"
+        }
+      },
+      "transitions": {
+        "end": {
+          "newState": "turnLeft"
+        }
+      }
+    },
+    "turnLeft": {
+      "type": "TURN",
+      "angle": -30,
+      "maxTurnSpeed": 0.3,
+      "minTurnSpeed": 0.25,
+      "transitions": {
+        "end": {
+          "newState": "findDuckLeft"
+        }
+      }
+    },
+    "findDuckLeft": {
+      "type": "VUFORIA_OBJECT",
+      "objectRegions": {
+        "center" : {
+          "label": "Duck",
+          "left": 200,
+          "right": 400,
+          "state": "duckCenter"
+        }
+      },
+      "transitions": {
+        "end": {
+          "newState": "findDuckRight"
+        }
+      }
+    },
+    "done": {
+      "type": "TERMINATE"
+    }
+  }
+}

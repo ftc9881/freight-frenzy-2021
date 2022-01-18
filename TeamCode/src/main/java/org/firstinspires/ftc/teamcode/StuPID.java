@@ -18,6 +18,15 @@ public class StuPID {
     double _i = 0;
     double _errorPrev = 0;
 
+    public StuPID() {
+    }
+
+    public StuPID(double kP, double kI, double kD) {
+        _kP = kP;
+        _kI = kI;
+        _kD = kD;
+    }
+
     public void configure(JSONObject jsonObject) throws ConfigurationException {
         try {
             if (jsonObject.has("kP")) {

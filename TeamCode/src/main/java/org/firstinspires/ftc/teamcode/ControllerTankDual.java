@@ -19,8 +19,8 @@ public class ControllerTankDual extends Controller implements ControllerIF {
     private Movement _movement = new Movement(0, 0, 0);
 
     @Override
-    public void configure(JSONObject jsonObject) throws ConfigurationException {
-        super.configure(jsonObject);
+    public void configure(JSONObject jsonObject, Map<String, DeviceIF> devices) throws ConfigurationException {
+        super.configure(jsonObject, devices);
     }
 
     @Override

@@ -44,7 +44,7 @@ public class AutoStateVuforiaObject extends AutoState implements AutoStateIF {
      */
     private TFObjectDetector _tfod;
 
-    public double _zoom = 1;
+    public double _zoom = 2;
 
     public double _aspectRatio = 16.0/9.0;
 
@@ -139,6 +139,12 @@ public class AutoStateVuforiaObject extends AutoState implements AutoStateIF {
         super.configure(jsonObject, driveTrain, devices, sensors);
 
         try {
+            if (jsonObject.has("zoom")) {
+                _zoom = jsonObject.getDouble("zoom");
+            }
+            if (jsonObject.has("aspectRatio")) {
+                _aspectRatio = jsonObject.getDouble("aspectRatio");
+            }
             if(jsonObject.has("objectRegions")) {
                 configureObjectRegions(jsonObject.getJSONObject("objectRegions"), driveTrain, devices, sensors);
             } else {
@@ -255,12 +261,10 @@ public class AutoStateVuforiaObject extends AutoState implements AutoStateIF {
     }
 
     String evaluateTransitions(Map<String, Object> propertyValues) {
-        String newState = super.evaluateTransitions(propertyValues);
-
-        if(newState == null) {
+        if(_newState != null) {
             return _newState;
         } else {
-            return newState;
+            return super.evaluateTransitions(propertyValues);
         }
     }
 }

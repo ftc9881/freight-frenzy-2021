@@ -11,9 +11,13 @@ import java.util.Map;
 public class AutoStateMotor extends AutoState implements AutoStateIF {
     private static final String CLASS_NAME = "AutoStateMotor";
 
-    double _speed = 1;
-    int _maxPosition = Integer.MAX_VALUE;
     DeviceMotor _deviceMotor;
+
+    double _speed = 1;
+    int _targetPosition = Integer.MIN_VALUE;  // Treat MIN_VALUE as missing
+    int _maxError = 100;
+
+    StuPID _pid = new StuPID(.001, 0, 0);
 
     public AutoStateMotor(OpMode opMode) {
         super(opMode);
@@ -41,8 +45,14 @@ public class AutoStateMotor extends AutoState implements AutoStateIF {
             if (jsonObject.has("speed")) {
                 _speed = jsonObject.getDouble("speed");
             }
-            if (jsonObject.has("maxPosition")) {
-                _maxPosition = jsonObject.getInt("maxPosition");
+            if (jsonObject.has("targetPosition")) {
+                _targetPosition = jsonObject.getInt("targetPosition");
+            }
+            if (jsonObject.has("maxError")) {
+                _maxError = jsonObject.getInt("maxError");
+            }
+            if (jsonObject.has("pid")) {
+                _pid.configure(jsonObject.getJSONObject("pid"));
             }
         } catch (JSONException e) {
             throw new ConfigurationException(e.getMessage(), e);
@@ -63,11 +73,21 @@ public class AutoStateMotor extends AutoState implements AutoStateIF {
         if(active) {
             RobotLog.dd(CLASS_NAME, "doAction()");
 
-            _deviceMotor.setSpeed(_speed);
+            if(_targetPosition != Integer.MIN_VALUE) {
+                int position = _deviceMotor.getCurrentPosition();
 
-            int position = _deviceMotor.getCurrentPosition();
+                double controlVariable = _pid.getControlVariable(position, _targetPosition, 1);
 
-            active = Math.abs(position) <= _maxPosition;
+                controlVariable = Math.max(-1, Math.min(1, controlVariable));
+
+                double effSpeed = _speed * controlVariable;
+
+                _deviceMotor.setSpeed(effSpeed);
+
+                active = Math.abs(position - _targetPosition) > _maxError;
+            } else {
+                _deviceMotor.setSpeed(_speed);
+            }
         }
 
         return active;
