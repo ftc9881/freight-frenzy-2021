@@ -1,0 +1,73 @@
+{
+  "driveTrain": {
+    "type": "TANK",
+    "telemetry": true,
+    "motors": {
+      "left": {
+        "name": "left_drive",
+        "direction": "FORWARD",
+        "clicksPerMeter": 1500,
+        "speedExponent": 2,
+        "speedScale": "1"
+      },
+      "right": {
+        "name": "right_drive",
+        "direction": "REVERSE",
+        "clicksPerMeter": 1500,
+        "speedExponent": 2,
+        "speedScale": "1"
+      }
+    }
+  },
+  "sensors": {
+    "imu_control": {
+      "type": "IMU",
+      "name": "imu_control",
+      "telemetry": true,
+      "log": false,
+      "axesOrder": "ZYX",
+      "xAxis": "Z",
+      "yAxis": "Y",
+      "zAxis": "X",
+      "reverse": true
+    }
+  },
+  "controllerOne": {
+    "type": "TANK_STEER",
+    "telemetry": false,
+    "turnScale": 0.9,
+    "turnExponent": 1,
+    "controls": {
+      "LEFT_X": {
+        "telemetry": false
+      },
+      "LEFT_Y": {
+        "telemetry": false
+      },
+      "RIGHT_X": {
+        "telemetry": false
+      },
+      "RIGHT_Y": {
+        "telemetry": false
+      }
+    }
+  },
+  "controllerTwo": {
+    "type": "SHOOTER",
+    "telemetry": false,
+    "controls": {
+      "LEFT_X": {
+        "telemetry": false
+      },
+      "LEFT_Y": {
+        "telemetry": false
+      },
+      "RIGHT_X": {
+        "telemetry": false
+      },
+      "RIGHT_Y": {
+        "telemetry": false
+      }
+    }
+  }
+}
